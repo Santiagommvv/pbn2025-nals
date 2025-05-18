@@ -1,7 +1,7 @@
 #ifndef LISTAES_H
 #define LISTAES_H
 
-#include "Nodo.h"
+#include "nodo.h"
 
 typedef struct{
     Nodo* nodos;

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "include/listaES.h" //definir bandera si queremos sacar include/ de la cadena
-#include "include/Nodo.h"
+#include "include/nodo.h"
 
 int main(){
 
