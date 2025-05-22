@@ -21,3 +21,25 @@ Nodo* crearNodo(int dato) {
 
     return nuevoNodo;
 }
+
+
+
+void setNext(Nodo* actual, Nodo* siguiente){
+    if(actual!= NULL){
+        actual->siguienteNodo = siguiente
+    }
+}
+
+Nodo* next(Nodo* actual) {
+    if (hasNext(actual)==1){
+        return actual->siguienteNodo;
+    }
+  return NULL;
+}
+
+int hasNext(Nodo* actual){
+    if (actual!= NULL && actual->siguienteNodo != NULL){
+        return 1;
+    }
+  return 0;
+}
