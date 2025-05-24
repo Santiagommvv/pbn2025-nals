@@ -4,6 +4,8 @@
 #include "nodo.h"
 
 typedef struct{
-    Nodo* nodos;
+    Nodo * cabeza;
+    Nodo * cola;
+    int tamanio;
 } Lista;
 #endif //LISTAES_H

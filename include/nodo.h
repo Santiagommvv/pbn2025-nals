@@ -4,8 +4,12 @@
 
 #ifndef NODO_H
 #define NODO_H
+
 typedef struct Nodo{
-    int * dato;   //todavía no sabemos el tipo
+    int dato;   //todavía no sabemos el tipo
     struct Nodo* siguienteNodo;
 } Nodo;
+
+Nodo* crearNodo(int dato);
+
 #endif //NODO_H
