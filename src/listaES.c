@@ -5,7 +5,7 @@
 
 //Inserta un nodo al inicio de la lista y ese nodo es la cabeza
 void insertarAlInicio(Nodo** cabeza, int dato){
-   Nodo* nuevaCabeza = crear(dato);
+    Nodo* nuevaCabeza = crear(dato);
     if (*cabeza== NULL){
         *cabeza = nuevaCabeza;
     }else{

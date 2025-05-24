@@ -4,7 +4,9 @@
 #include "nodo.h"
 
 typedef struct{
-    Nodo* nodos;
+    Nodo * cabeza;
+    Nodo * cola;
+    int tamanio;
 } Lista;
 
 //Nodo* crearNodo(int dato); //no estoy seguro si sea una función que use lista
