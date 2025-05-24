@@ -3,20 +3,18 @@
 #include "../include/nodo.h"
 #include "../include/listaES.h"
 
-//por ahora la usamos global
 Lista miLista;
 
 //Inserta un nodo al inicio de la lista y ese nodo es la cabeza
 void insertarAlInicio(Nodo** cabeza, int dato){
-   Nodo* nuevaCabeza = crearNodo(dato);
-    if (*cabeza == NULL){
+    Nodo* nuevaCabeza = crear(dato);
+    if (*cabeza== NULL){
         *cabeza = nuevaCabeza;
     }else{
    //  nuevaCabeza -> &cabeza;
     }
 }
 
-//probablemente argumento 1, Nodo* cola (el nombre no tiene ningún efecto, igual)
 void insertarAlFinal(Nodo* cabeza, int dato){
 
 }
@@ -64,9 +62,10 @@ void eliminarNodo(Nodo** cabeza, int dato) {
 
 }
 
-//void eliminarUltimoNodo(Nodo** cabeza, int dato){
+
+// void eliminarUltimoNodo(Nodo** cabeza, int dato){
 //
-//}
+// }
 
 Nodo* buscarNodo(Nodo* cabeza, int dato){
     Nodo* nodoActual = cabeza;

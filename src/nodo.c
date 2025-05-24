@@ -42,15 +42,15 @@ Nodo* next(Nodo* actual) {
     if (hasNext(actual)){
         return actual->siguienteNodo;
     }
-  return NULL;
+    return NULL;
 }
 
 //La funcion te permite saber si hay un nodo siguiente 
 int hasNext(Nodo* actual){
-    if (actual!= NULL && actual->siguienteNodo != NULL){
+    if (actual != NULL && actual->siguienteNodo != NULL){
         return 1;
     }
-  return 0;
+    return 0;
 }
 
 void eliminarNodo(Nodo* actual){
