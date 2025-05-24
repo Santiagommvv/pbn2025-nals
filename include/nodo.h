@@ -1,15 +1,13 @@
-//
-// Created by zbsam145 on 16/5/2025.
-//
-
 #ifndef NODO_H
 #define NODO_H
-
 typedef struct Nodo{
-    int dato;   //todavía no sabemos el tipo
+    int dato;
     struct Nodo* siguienteNodo;
 } Nodo;
 
 Nodo* crearNodo(int dato);
+void setNext(Nodo* actual, Nodo* siguiente);
+Nodo* next(Nodo* actual);
+int hasNext(Nodo* actual);
 
 #endif //NODO_H
