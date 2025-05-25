@@ -7,16 +7,22 @@ Lista miLista;
 
 //Inserta un nodo al inicio de la lista y ese nodo es la cabeza
 void insertarAlInicio(Nodo** cabeza, int dato){
-    Nodo* nuevaCabeza = crear(dato);
-    if (*cabeza== NULL){
+    Nodo* nuevaCabeza = crearNodo(dato);
+    if (*cabeza == NULL){
         *cabeza = nuevaCabeza;
     }else{
-   //  nuevaCabeza -> &cabeza;
+        nuevaCabeza->siguienteNodo = *cabeza;
+        *cabeza = nuevaCabeza;
     }
 }
 
-void insertarAlFinal(Nodo* cabeza, int dato){
-
+void insertarAlFinal(Nodo** cola, int dato){
+    Nodo * nuevaCola = crearNodo(dato);
+    if(*cola == NULL){
+        *cola = nuevaCola;
+    }else{
+        // No se como recorrer la lista si no trabajamos sobre lista, sino sobre los nodos
+    }
 }
 
 void eliminarNodo(Nodo** cabeza, int dato) {
