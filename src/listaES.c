@@ -8,21 +8,35 @@ Lista miLista;
 //Inserta un nodo al inicio de la lista y ese nodo es la cabeza
 void insertarAlInicio(Nodo** cabeza, int dato){
     Nodo* nuevaCabeza = crearNodo(dato);
-    if (*cabeza == NULL){
+
+    if (cabeza == NULL){
         *cabeza = nuevaCabeza;
+        miLista.cabeza = nuevaCabeza;
+        miLista.cola = nuevaCabeza;
     }else{
         nuevaCabeza->siguienteNodo = *cabeza;
         *cabeza = nuevaCabeza;
     }
+
+    miLista.tamanio++;
 }
 
+//Inserta un nodo al final de la lista y ese nodo es la cola
 void insertarAlFinal(Nodo** cola, int dato){
-    Nodo * nuevaCola = crearNodo(dato);
+    Nodo* nuevaCola = crearNodo(dato);
+
+
     if(*cola == NULL){
         *cola = nuevaCola;
+        miLista.cabeza = nuevaCola;
+        miLista.cola = nuevaCola;
     }else{
-        // No se como recorrer la lista si no trabajamos sobre lista, sino sobre los nodos
+        (*cola)->siguienteNodo = nuevaCola;
+        *cola = nuevaCola;
+        miLista.cola = nuevaCola;
     }
+
+    miLista.tamanio++;
 }
 
 void eliminarNodo(Nodo** cabeza, int dato) {
