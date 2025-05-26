@@ -9,7 +9,7 @@ Lista miLista;
 void insertarAlInicio(Nodo** cabeza, int dato){
     Nodo* nuevaCabeza = crearNodo(dato);
 
-    if (cabeza == NULL){
+    if (*cabeza == NULL){
         *cabeza = nuevaCabeza;
         miLista.cabeza = nuevaCabeza;
         miLista.cola = nuevaCabeza;
