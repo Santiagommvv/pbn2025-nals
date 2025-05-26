@@ -17,12 +17,6 @@ int main(){
         "5) salir del programa\n\n"); 
         scanf("%d", &opcion);
 
-    if (opcion < 1 || opcion > 5){
-        printf("\nopcion incorrecta, elija un numero del 1 al 5\n");
-        continue;
-    }
-
-
     switch (opcion){
     case 1:
         int valor;
@@ -37,23 +31,26 @@ int main(){
     case 4:     
         printf("imprimir los elementos de la lista");  
     
-    case 5:{
+    case 5:
         int salir;
         printf(
-            "\n¿esta seguro que desea salir de la lista?\n" 
+            "\n¿Esta seguro que desea salir de la lista?\n" 
             "1) SI\n"
             "2) NO\n");
         scanf("%d", &salir);
-        if (salir==1){
+        if (salir == 1){
            printf("Adios :)\n");
         return 0;
-         }else if(salir == 2){
+         }else if (salir == 2){
            printf("\nVolviendo al menu principal\n");
             continue;
         }else{
            printf("\nLa opcion es incorrecta, volviendo al menu principal\n");
         }
-      }
+      
+    default:  
+        printf("\nopcion incorrecta, elija un numero del 1 al 5\n");
+        break;
     }
   }while(1);
 }
