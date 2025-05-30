@@ -17,7 +17,7 @@ Requisitos:
 
         void insertarAlInicio(Nodo** cabeza, int dato) – Inserta un nodo al comienzo de la lista.
 
-        void insertarAlFinal(Nodo** cabeza, int dato) – Inserta un nodo al final de la lista.
+        void insertarAlFinal(Nodo** cola, int dato) – Inserta un nodo al final de la lista.
 
         void eliminarNodo(Nodo** cabeza, int dato) – Elimina el primer nodo que contenga el dato especificado.
 
