@@ -2,8 +2,6 @@
 #include "./src/listaES.c"
 #include "./src/nodo.c"
 
-//extern Lista miLista;
-
 int main() {
     int opcion;
     int valor;
@@ -20,7 +18,7 @@ int main() {
         scanf("%d", &opcion);
 
         switch (opcion) {
-             case 1: {
+            case 1: {
                 int decision = 0;
                 int valor;
 

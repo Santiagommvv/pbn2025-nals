@@ -81,11 +81,6 @@ void eliminarNodo(Nodo** cabeza, int dato) {
 
 }
 
-
-// void eliminarUltimoNodo(Nodo** cabeza, int dato){
-//
-// }
-
 Nodo* buscarNodo(Nodo* cabeza, int dato){
     Nodo* nodoActual = cabeza;
 
