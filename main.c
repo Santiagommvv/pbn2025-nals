@@ -100,6 +100,4 @@ int main() {
             break;
         }
     } while (1);
-
-    return 0;
 }
