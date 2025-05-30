@@ -39,7 +39,7 @@ int main() {
                     } else if (decision == 2) {
                         printf("\nIngrese el numero que desea agregar:\n");
                         scanf("%d", &valor);
-                        insertarAlFinal(&miLista.cabeza, valor);
+                        insertarAlFinal(&miLista.cola, valor);
                         break; 
                     } else if (decision == 3) {
                         printf("\n Volviendo al menu principal\n");
