@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "nodo.h"
+#include "../include/nodo.h"
 
 // Crea un nuevo nodo
 Nodo* crearNodo(int dato) {

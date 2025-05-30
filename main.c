@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "include/listaES.h"
-#include "../include/nodo.h"
+#include "include/nodo.h"
 
 extern Lista miLista;
 
