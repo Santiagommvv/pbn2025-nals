@@ -9,6 +9,8 @@ typedef struct{
     int tamanio;
 } Lista;
 
+Lista miLista;
+
 //Nodo* crearNodo(int dato); //no estoy seguro si sea una función que use lista
 void insertarAlInicio(Nodo** cabeza, int dato);
 void insertarAlFinal(Nodo** cola, int dato);  //chequear que acá está con doble puntero y en la implementación no.

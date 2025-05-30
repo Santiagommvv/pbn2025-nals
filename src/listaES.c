@@ -3,7 +3,6 @@
 #include "../include/nodo.h"
 #include "../include/listaES.h"
 
-Lista miLista;
 
 //Inserta un nodo al inicio de la lista y ese nodo es la cabeza
 void insertarAlInicio(Nodo** cabeza, int dato){

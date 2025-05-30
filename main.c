@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "include/listaES.h"
-#include "include/nodo.h"
+#include "./src/listaES.c"
+#include "./src/nodo.c"
 
-extern Lista miLista;
+//extern Lista miLista;
 
 int main() {
     int opcion;
