@@ -9,12 +9,12 @@ int main() {
     do {
         printf(
             "\nElije que desea realizar:\n"
-            "1) agregar un numero a la lista\n"
-            "2) eliminar un elemento de la lista\n"
-            "3) buscar un elemento de la lista\n"
-            "4) imprimir los elementos de la lista\n"
-            "5) vaciar la lista\n"
-            "6) salir del programa\n\n");
+            "1) Agregar un número a la lista\n"
+            "2) Eliminar un elemento de la lista\n"
+            "3) Buscar un elemento de la lista\n"
+            "4) Imprimir los elementos de la lista\n"
+            "5) Vaciar la lista\n"
+            "6) Salir del programa\n\n");
         scanf("%d", &opcion);
 
         switch (opcion) {
@@ -23,26 +23,26 @@ int main() {
                 int valor;
 
                 while (decision != 3) {
-                    printf("\n¿Donde desea agregar el numero?\n"
+                    printf("\n¿Dónde desea agregar el número?\n"
                         "1) Inicio\n"
                         "2) Final\n"
                         "3) Salir al menu\n");
                     scanf("%d", &decision);
 
                     if (decision == 1) {
-                        printf("\nIngrese el numero que desea agregar:\n");
+                        printf("\nIngrese el número que desea agregar:\n");
                         scanf("%d", &valor);
                         insertarAlInicio(&miLista.cabeza, valor);
                         break;
                     } else if (decision == 2) {
-                        printf("\nIngrese el numero que desea agregar:\n");
+                        printf("\nIngrese el número que desea agregar:\n");
                         scanf("%d", &valor);
                         insertarAlFinal(&miLista.cola, valor);
                         break; 
                     } else if (decision == 3) {
-                        printf("\n Volviendo al menu principal\n");
+                        printf("\n Volviendo al menú principal\n");
                     } else {
-                        printf("\nOpción invalida. Intente nuevamente.\n");
+                        printf("\nOpción inválida. Intente nuevamente.\n");
                     }
                 }
 
@@ -78,7 +78,7 @@ int main() {
         case 6: {
             int salir;
             printf(
-                "\n¿Esta seguro que desea salir del programa?\n"
+                "\n¿Está seguro que desea salir del programa?\n"
                 "1) SI\n"
                 "2) NO\n");
             scanf("%d", &salir);
@@ -86,10 +86,10 @@ int main() {
                 printf("Adios :)\n");
                 return 0;
             } else if (salir == 2) {
-                printf("\nVolviendo al menu principal\n");
+                printf("\nVolviendo al menú principal\n");
                 continue;
             } else {
-                printf("\nOpcion incorrecta, volviendo al menu principal\n");
+                printf("\nOpción incorrecta, volviendo al menú principal\n");
             }
             break;
         }
