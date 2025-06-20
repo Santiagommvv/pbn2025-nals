@@ -1,0 +1,10 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#define MAX_MATERIAS_POR_ALUMNO 10
+#define MAX_ALUMNOS_POR_MATERIA 50
+#define MAX_ALUMNOS 50
+#define MAX_MATERIAS 50
+#define MAX_NOMBRE 100
+
+#endif CONFIG_H
