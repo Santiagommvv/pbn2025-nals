@@ -3,16 +3,25 @@
 
 #include "config.h"
 
+typedef struct{
+    int idMateria;
+    float nota;
+    int aprobo;
+} MateriaRendida;
+
 typedef struct Alumno{
     int id;
     char nombre[100];
     int edad;
 
     int materiasInscripto[MAX_MATERIAS_POR_ALUMNO];
-    int cantidadDeMaterias;
+    int cantidadDeMateriasInscripto;
+
+    MateriaRendida materiasRendidas[MAX_MATERIAS_POR_ALUMNO];
+    int cantidadMateriasRendidas;
 } Alumno;
 
 Alumno crearAlumno(const char* nombre, int edad);
-
+int rendirMateria(Alumno* alumno, int idMateria, float nota);
 
 #endif // ALUMNO_H

@@ -5,6 +5,9 @@
 #define MAX_ALUMNOS_POR_MATERIA 50
 #define MAX_ALUMNOS 50
 #define MAX_MATERIAS 50
+#define MAX_CORRELATIVAS 5
 #define MAX_NOMBRE 100
+#define TRUE 1
+#define FALSE 0
 
-#endif CONFIG_H
+#endif // CONFIG_H

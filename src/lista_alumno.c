@@ -62,6 +62,24 @@ void eliminarAlumno(NodoAlumno** cabeza, int id) {
     printf("Alumno con ID %d no encontrado\n", id);
 }
 
+void buscarAlumnosPorEdad(NodoAlumno* cabeza, int edadMin, int edadMax){
+    int encontrados = 0;
+
+    while(cabeza){
+        int edad = cabeza->datos.edad;
+        if(edad >= edadMin && edad <= edadMax) {
+            Alumno a = cabeza->datos;
+            printf("ID: %d | Nombre: %s | Edad: %d | Materias inscriptas: %d\n", a.id, a.nombre, a.edad, a.cantidadDeMateriasInscripto);
+        encontrados++;
+        }
+        cabeza = cabeza->siguiente;
+    }
+
+    if(encontrados == 0){
+        printf("No se encontraron alumnos entre %d y %d años.\n", edadMin, edadMax);
+    }
+}
+
 void modificarAlumno(NodoAlumno* cabeza, int id){
     NodoAlumno* alumno = buscarAlumnoPorID(cabeza, id);
     if(!alumno) {
@@ -85,7 +103,34 @@ void listarAlumnos(NodoAlumno* cabeza) {
     printf("Listado de alumnos:\n");
     while (cabeza) {
         Alumno a = cabeza->datos;
-        printf("ID: %d | Nombre: %s | Edad: %d | Materias inscriptas: %d\n",a.id, a.nombre, a.edad, a.cantidadDeMaterias);
+        printf("ID: %d | Nombre: %s | Edad: %d | Materias inscriptas: %d\n",a.id, a.nombre, a.edad, a.cantidadDeMateriasInscripto);
         cabeza = cabeza->siguiente;
+    }
+}
+
+void listarMateriasAprobadas(Alumno* alumno, NodoMateria* listaMaterias){
+    if(!alumno) {
+        printf("Alumno no encontrado.\n");
+        return;
+    }
+
+    int encontradas = 0;
+
+    printf("Materias aprobadas de %s (ID %d):\n", alumno->nombre, alumno->id);
+
+    for(int i= 0;i< alumno->cantidadMateriasRendidas; i++){
+        MateriaRendida materia = alumno->materiasRendidas[i];
+        if(materia.aprobo){
+            NodoMateria* nodoMateria = buscarMateriaPorID(listaMaterias, materia.idMateria);
+            printf("- %s (ID %d), nota: %.2f\n",
+                    nodoMateria ? nodoMateria->datos.nombre : "Desconocida",
+                    materia.idMateria,
+                    materia.nota);
+                encontradas++;            
+        }
+    }
+
+    if(encontradas == 0){
+        printf("No hay materias aprobadas registradas.\n");
     }
 }
