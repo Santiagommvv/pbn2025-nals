@@ -3,8 +3,8 @@
 
 #include "config.h"
 
-typedef struct{
-    int idMateria;
+typedef struct MateriaRendida{
+    int IDMateria;
     float nota;
     int aprobo;
 } MateriaRendida;

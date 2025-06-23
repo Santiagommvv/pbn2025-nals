@@ -121,10 +121,10 @@ void listarMateriasAprobadas(Alumno* alumno, NodoMateria* listaMaterias){
     for(int i= 0;i< alumno->cantidadMateriasRendidas; i++){
         MateriaRendida materia = alumno->materiasRendidas[i];
         if(materia.aprobo){
-            NodoMateria* nodoMateria = buscarMateriaPorID(listaMaterias, materia.idMateria);
+            NodoMateria* nodoMateria = buscarMateriaPorID(listaMaterias, materia.IDMateria);
             printf("- %s (ID %d), nota: %.2f\n",
                     nodoMateria ? nodoMateria->datos.nombre : "Desconocida",
-                    materia.idMateria,
+                    materia.IDMateria,
                     materia.nota);
                 encontradas++;            
         }
@@ -132,5 +132,21 @@ void listarMateriasAprobadas(Alumno* alumno, NodoMateria* listaMaterias){
 
     if(encontradas == 0){
         printf("No hay materias aprobadas registradas.\n");
+    }
+}
+    
+void listarMateriasRendidas(Alumno* alumno, NodoMateria* listaMaterias) {
+    if(alumno->cantidadMateriasRendidas == 0){
+        printf("El alumno no ha rendido ningunua materia.\n");
+        return;
+    }
+
+    printf("Materias rendidas por %s", alumno->nombre);
+    for(int i = 0; i<alumno->cantidadMateriasRendidas; i++){
+        MateriaRendida rendida = alumno->materiasRendidas[i];
+        NodoMateria* materia = buscarMateriaPorID(listaMaterias, rendida.IDMateria);
+        if(materia) {
+            printf("ID: %d | Nombre: %s | Nota: %.2f | Estado: %s\n", rendida.IDMateria, materia->datos.nombre, rendida.nota, rendida.aprobo ? "Aprobado" : "Desaprobado");
+        }
     }
 }

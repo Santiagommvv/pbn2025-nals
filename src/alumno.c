@@ -20,7 +20,7 @@ int rendirMateria(Alumno* alumno, int idMateria, float nota){
     if(!alumno) return 0;
 
     for(int i = 0; i<alumno->cantidadMateriasRendidas;i++){
-        if(alumno->materiasRendidas[i].idMateria == idMateria){
+        if(alumno->materiasRendidas[i].IDMateria == idMateria){
             printf("La materia ya fue rendida\n");
             return 0;
         }
@@ -32,7 +32,7 @@ int rendirMateria(Alumno* alumno, int idMateria, float nota){
     }
 
     MateriaRendida nueva;
-    nueva.idMateria = idMateria;
+    nueva.IDMateria = idMateria;
     nueva.nota = nota;
     nueva.aprobo = (nota >= 4.0);
 
