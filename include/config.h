@@ -7,7 +7,15 @@
 #define MAX_MATERIAS 50
 #define MAX_CORRELATIVAS 5
 #define MAX_NOMBRE 100
+
 #define TRUE 1
 #define FALSE 0
+
+#define PAGINADO_TAM 10
+
+#define ALUMNOS_CSV  "alumnos.csv"
+#define MATERIAS_CSV "materias.csv"
+#define SEP_LISTA    "|"   // separa IDs dentro de una celda
+#define SEP_RENDIDA  ":"   // separa id:nota:aprobo
 
 #endif // CONFIG_H
