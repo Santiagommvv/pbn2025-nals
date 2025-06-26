@@ -77,7 +77,7 @@ NodoAVL* insertarAVL(NodoAVL* nodo, Alumno alumno) {
     return nodo;
 }
 
-void imprimirInOrden(NodoAVL* raiz) {
+void imprimir InOrden(NodoAVL* raiz) {
     if (!raiz) return;
     imprimirEnOrden(raiz->izq);
     printf("<<%i# %s %i>>\n", raiz->alumno.id, raiz->alumno.nombre, raiz->alumno.edad);
