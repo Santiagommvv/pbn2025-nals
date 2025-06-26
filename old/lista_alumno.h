@@ -1,3 +1,4 @@
+/*
 #ifndef LISTA_ALUMNO_H
 #define LISTA_ALUMNO_H
 
@@ -22,4 +23,4 @@ void listarMateriasAprobadas(Alumno* alumno, NodoMateria* listaMateria);
 void listarMateriasRendidas(Alumno* alumno, NodoMateria* listaMaterias);
 
 #endif // LISTA_ALUMNO_H
-
+*/

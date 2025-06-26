@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../include/lista_materia.h"
+#include "lista_materia.h"
 
 static int ultimoIDMateria = 0;
 

@@ -1,32 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../include/persistencia.h"
+#include "persistencia.h"
 #include "../include/config.h"
 
 //Guardar
-static void guardarAlumnosCSV(NodoAlumno* a, FILE* f){
-    while(a){
-        Alumno al = a->datos;
-        fprintf(f, "%d, %s, %d", al.id, al.nombre, al.edad);
+static void guardarAlumnosCSV(NodoAVL* a, FILE* f){
+    if (!a) return;
+    
+    guardarAlumnosCSV(a->izq, f);
+    
 
-        // Materias inscriptas
-        for(int i=0; i<al.cantidadDeMateriasInscripto; i++){
-            fprintf(f, "%d", al.materiasInscripto[i]);
-            if(i<al.cantidadDeMateriasInscripto-1) fputc(SEP_LISTA[0], f);
-        }
-        fputc(',',f);
+    Alumno al = a->alumno;
+    fprintf(f, "%d, %s, %d", al.id, al.nombre, al.edad);
 
-        // materias rendidas
-        for(int i=0; i<al.cantidadMateriasRendidas; i++){
-            MateriaRendida mr = al.materiasRendidas[i];
-            fprintf(f, "%d:%0.2f:%d", mr.IDMateria, mr.nota, mr.aprobo);
-            if(i<al.cantidadMateriasRendidas-1) fputc(SEP_LISTA[0],f);
-        }
-
-        fputc('\n', f);
-        a=a->siguiente;
+    // Materias inscriptas
+    for(int i=0; i<al.cantidadDeMateriasInscripto; i++){
+        fprintf(f, "%d", al.materiasInscripto[i]);
+        if(i<al.cantidadDeMateriasInscripto-1) fputc(SEP_LISTA[0], f);
     }
+    fputc(',',f);
+
+    // materias rendidas
+    for(int i=0; i<al.cantidadMateriasRendidas; i++){
+        MateriaRendida mr = al.materiasRendidas[i];
+        fprintf(f, "%d:%0.2f:%d", mr.IDMateria, mr.nota, mr.aprobo);
+        if(i<al.cantidadMateriasRendidas-1) fputc(SEP_LISTA[0],f);
+    }
+
+    fputc('\n', f);
+    
+    guardarAlumnosCSV(a->der,f);
 }
 
 static void guardarMateriasCSV(NodoMateria* m, FILE* f){
@@ -42,7 +46,7 @@ static void guardarMateriasCSV(NodoMateria* m, FILE* f){
     }
 }
 
-void guardarDatos(NodoAlumno* alumnos, NodoMateria* materias){
+void guardarDatos(NodoAVL* alumnos, NodoMateria* materias){
     FILE* fa = fopen(ALUMNOS_CSV, "w");
     FILE* fm = fopen(MATERIAS_CSV, "w");
     if(!fa||!fm){puts("Error abriendo archivos para guardar"); return;}
@@ -65,7 +69,7 @@ static void split(char* s, char* delim, char*** out, int* count){
     }
 }
 
-static void cargarAlumnosCSV(NodoAlumno** lista, FILE* f){
+static void cargarAlumnosCSV(NodoAVL** lista, FILE* f){
     char linea[512];
     while(fgets(linea,sizeof(linea),f)){
         Alumno al = {0};
@@ -104,7 +108,7 @@ static void cargarAlumnosCSV(NodoAlumno** lista, FILE* f){
             }
             free(rens);
         }
-        agregarAlumno(lista,al);
+        *lista = insertarAVL(*lista, al);
     }
 }
 
@@ -132,7 +136,7 @@ static void cargarMateriasCSV(NodoMateria** lista, FILE* f){
     }
 }
 
-void cargarDatos(NodoAlumno** alumnos, NodoMateria** materias){
+void cargarDatos(NodoAVL** alumnos, NodoMateria** materias){
     FILE* fa=fopen(ALUMNOS_CSV, "r");
     FILE* fm=fopen(MATERIAS_CSV, "r");
     if(fa){ cargarAlumnosCSV(alumnos, fa); fclose(fa);}

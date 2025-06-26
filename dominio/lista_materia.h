@@ -16,4 +16,5 @@ void listarMaterias(NodoMateria* cabeza);
 NodoMateria* buscarMateriaPorID(NodoMateria* cabeza, int id);
 NodoMateria* buscarMateriaPorNombre(NodoMateria* cabeza, const char* nombre);
 
+
 #endif // LISTA_MATERIA_H

@@ -1,0 +1,8 @@
+código, nombre, correlativas
+1, algoritmos y programacion 1
+2, algoritmos y programacion 2, 1
+3, estructuras de datos, 2
+4, programacion de bajo nivel
+5, sistemas operativos, 4
+6, ingles
+7, ingles groso, 6

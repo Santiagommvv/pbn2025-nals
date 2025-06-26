@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "../include/randomizador.h"
+#include "randomizador.h"
 
 // Nombres y apellidos base
 const char* nombres[] = {"Juan", "Ana", "Carlos", "Laura", "Mauro", "Lucia", "Pedro", "Martina"};
@@ -26,11 +26,11 @@ Materia crearMateriaAleatoria(){
     return m;
 }
 
-void generarAlumnosAleatorios(NodoAlumno** lista, int cantidad){
+void generarAlumnosAleatorios(NodoAVL** raiz, int cantidad){
     srand(time(NULL));
     for(int i=0; i<cantidad;i++){
         Alumno a = crearAlumnoAleatorio();
-        agregarAlumno(lista, a);
+        *raiz = insertarAVL(*raiz, a);
     }
     printf("%d alumnos aleatorios generados.\n", cantidad);
 }

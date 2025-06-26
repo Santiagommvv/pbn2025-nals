@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../include/materia.h"
+#include "materia.h"
 
 Materia crearMateria(const char* nombre){
     Materia materia;
