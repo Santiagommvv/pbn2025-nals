@@ -1,18 +1,29 @@
-//
-// Created by zbsam145 on 24/6/2025.
-//
-
 #ifndef ALUMNO_H
 #define ALUMNO_H
-typedef struct Alumno {
+
+#include "../include/config.h"
+#include "materia.h"
+
+typedef struct MateriaRendida{
+    int IDMateria;
+    float nota;
+    int aprobo;
+} MateriaRendida;
+
+typedef struct Alumno{
     int id;
     char nombre[100];
     int edad;
-    //int materiasInscripto[1000];
-    //int cantidadDeMaterias;
-}Alumno;
 
-Alumno* crearAlumno(int id, const char *nombre, int edad) {}
-void liberarAlumno(Alumno* alumno) {}
+    int materiasInscripto[MAX_MATERIAS_POR_ALUMNO];
+    int cantidadDeMateriasInscripto;
 
-#endif //ALUMNO_H
+    MateriaRendida materiasRendidas[MAX_MATERIAS_POR_ALUMNO];
+    int cantidadMateriasRendidas;
+} Alumno;
+
+Alumno crearAlumno(const char* nombre, int edad);
+int rendirMateria(Alumno* alumno, int idMateria, float nota);
+int inscribirAlumnoEnMateria(Alumno* alumno, Materia* materia);
+
+#endif // ALUMNO_H

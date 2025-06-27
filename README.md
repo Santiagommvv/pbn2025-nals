@@ -1,44 +1,40 @@
-Consigna: Implementación de una Lista Enlazada Simple en C
+Consigna del TP final:
 
-Objetivo:
-Implementar una estructura de datos de lista enlazada simple utilizando lenguaje C, con funcionalidades básicas de inserción, eliminación, búsqueda e impresión de elementos.
+Desarrollar un sistema de estudiantes en C. Debe permitir:
 
-Requisitos:
+-Dar de alta, modificar, eliminar y listar estudiantes
+-Buscar estudiantes por nombre
+-Buscar estudiantes por rango de edad
 
-    Definir una estructura Nodo que contenga:
+Además cada estudiante puede anotarse en N materias.
+-Dar de alta, modificar, eliminar y listar materias
+-Anotarse en una materia
+-Rendir una materia
 
-    Un campo int dato para almacenar el valor del nodo.
+El sistema debe poder soportar un gran listado de estudiantes y materias. Utilizar estructuras de datos para almacenar los listados. Decidir si se utiliza ordenamiento de los datos.
 
-    Un puntero al siguiente nodo.
+El diseño del sistema y los modelos es libre. Utilizar la creatividad para que el manejo del sistema sea lo más práctico posible.
 
-    Funciones obligatorias:
+Si los requerimientos planteados son cumplidos, el ejercicio está aprobado (nota 4). Puede pasar que en situaciones en la que la cantidad de datos sea muy grande, el sistema sea inmanejable. En ese caso, detallar las limitaciones de la solución propuesta (si las limitaciones son reconocidas no se considera desaprobado el punto).
 
-        Nodo* crearNodo(int dato) – Crea un nodo nuevo con un dato dado.
+Ideas no-obligatorias de implementar pero que suman puntos:
+utilizar paginado
+poder elegir el estudiante/materia de un listado reducido
+generar estudiantes de prueba y materias aleatorias de forma masiva
+estadísticas de los estudiantes y materias, etc.
+árboles de correlatividad de materias
+qué pasa si una materia anterior está desaprobada? Puede anotarse?
+cálculo de promedios.
+archivo de configuración general donde se especifican las variables del sistema.
+mejoras en la interfaz de usuario
+tests unitarios
+Persistencia en CSV
+(cualquier otra feature que quieran agregar)
 
-        void insertarAlInicio(Nodo** cabeza, int dato) – Inserta un nodo al comienzo de la lista.
+En el repositorio hacer un README con los integrantes, las consignas implementadas y los puntos extras que hayan desarrollado.
 
-        void insertarAlFinal(Nodo** cola, int dato) – Inserta un nodo al final de la lista.
+El trabajo se puede hacer de a cinco, cuatro o tres personas.
+Si el equipo tiene 4 personas deben hacer obligatoriamente un punto extra más para la nota 4.
+Si el equipo tiene 5 personas deben hacer obligatoriamente dos puntos extra más para la nota 4.
 
-        void eliminarNodo(Nodo** cabeza, int dato) – Elimina el primer nodo que contenga el dato especificado.
-
-        Nodo* buscarNodo(Nodo* cabeza, int dato) – Devuelve un puntero al nodo que contiene el dato (o NULL si no se encuentra).
-
-        void imprimirLista(Nodo* cabeza) – Imprime todos los elementos de la lista.
-
-        void liberarLista(Nodo** cabeza) – Libera toda la memoria utilizada por la lista.
-
-    Programa principal:
-
-        Implementa un menú interactivo para probar las funciones anteriores (agregar, eliminar, buscar, imprimir, salir).
-
-        Permitir al usuario ingresar valores por consola.
-
-Criterios de evaluación:
-
-    Correcta implementación de las funciones.
-
-    Uso adecuado de punteros.
-
-    Manejo de memoria dinámica (malloc, free).
-
-    Código bien comentado y organizado.
+Grabar un video de máximo 10 minutos (puede ser menos) mostrando el funcionamiento del sistema y los puntos implementados. En esta oportunidad no es necesario enfocarse tanto en el código, ya que se puede ver en el repositorio. Concéntrese en presentar el proyecto funcionando.
