@@ -1,3 +1,4 @@
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/alumno.h"
@@ -150,3 +151,4 @@ void listarMateriasRendidas(Alumno* alumno, NodoMateria* listaMaterias) {
         }
     }
 }
+*/
