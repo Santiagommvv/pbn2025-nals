@@ -3,7 +3,20 @@
 #include <string.h>
 #include "alumno.h"
 
-static int ultimoID = 0;
+static int ultimoID = 0;    //acá hay una discusión filosófica sobre si va "= 0" o no
+
+// Devuelve el último ID usado
+int obtenerUltimoID() {
+    return ultimoID;
+}
+
+// Establece el último ID usado al arrancar el programa
+void establecerUltimoID(int id) {
+    //para no pasarle un dato inválido
+    if(id > ultimoID) {
+        ultimoID = id;
+    }
+}
 
 Alumno crearAlumno(const char* nombre, int edad){
 
