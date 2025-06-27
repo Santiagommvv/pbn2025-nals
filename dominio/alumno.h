@@ -22,6 +22,8 @@ typedef struct Alumno{
     int cantidadMateriasRendidas;
 } Alumno;
 
+int obtenerUltimoID(void);
+void establecerUltimoID(int id);
 Alumno crearAlumno(const char* nombre, int edad);
 int rendirMateria(Alumno* alumno, int idMateria, float nota);
 int inscribirAlumnoEnMateria(Alumno* alumno, Materia* materia);

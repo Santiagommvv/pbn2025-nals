@@ -3,6 +3,13 @@
 #include <string.h>
 #include "persistencia.h"
 #include "../include/config.h"
+#include <sys/stat.h>
+
+//me fijo si hay datos persistidos de una sesión anterior
+int datosGuardadosDisponibles() {
+    struct stat buffer1, buffer2;
+    return stat(ALUMNOS_CSV, &buffer1) == 0 && stat(MATERIAS_CSV, &buffer2) == 0;
+}
 
 //Guardar
 static void guardarAlumnosCSV(NodoAVL* a, FILE* f){

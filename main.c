@@ -33,11 +33,38 @@ void mostrarMenu(){
     printf("Elija una opcion\n");
 }
 
+void cargarIDDesdeArchivo() {
+    FILE* f = fopen("./data/ultimo_id.txt", "r");
+    if(f) {
+        int id;
+        if(fscanf(f, "%d", &id) == 1) {
+            establecerUltimoID(id);
+        }
+        fclose(f);
+    }
+}
+
+void guardarIDEnArchivo() {
+    FILE* f = fopen("./data/ultimo_id.txt", "w");
+    if(f) {
+        fprintf(f, "%d\n", obtenerUltimoID());
+        fclose(f);
+    }
+}
+
 int main() {
+    cargarIDDesdeArchivo();
     NodoAVL* alumnos = NULL;
     NodoMateria* listaMaterias = NULL;
 
-    cargarDatos(&alumnos, &listaMaterias);
+    if (datosGuardadosDisponibles()) {
+        printf("Cargando datos previos...\n");
+        cargarDatos(&alumnos, &listaMaterias);
+    } else {
+        printf("Iniciando sistema vacío.\n");
+        alumnos = NULL;
+        listaMaterias = NULL;
+    }
 
     int opcion;
     char nombre[100];
@@ -242,5 +269,6 @@ int main() {
     guardarDatos(alumnos,listaMaterias);
     liberarAVL(alumnos);
     liberarListaMaterias(listaMaterias);
+    guardarIDEnArchivo();
     return 0;
 }
