@@ -1,7 +1,7 @@
 #ifndef ALUMNO_H
 #define ALUMNO_H
 
-#include "config.h"
+#include "../include/config.h"
 #include "materia.h"
 
 typedef struct MateriaRendida{

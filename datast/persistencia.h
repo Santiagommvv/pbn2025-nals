@@ -2,7 +2,7 @@
 #define PERSISTENCIA_H
 
 #include "../dominio/avl.h"
-#include "lista_materia.h"
+#include "../dominio/lista_materia.h"
 
 // Carga listas al iniciar
 void cargarDatos(NodoAVL** alumnos, NodoMateria** materias);
