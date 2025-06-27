@@ -1,3 +1,4 @@
+/*
 #include <stdlib.h>
 #include <string.h>
 #include "../include/alumno.h"
@@ -17,4 +18,4 @@ Alumno crearAlumno(int id, const char *nombre, int edad) {
 void liberarAlumno(Alumno* alumno) {
     free(alumno);
 }
-
+*/

@@ -1,3 +1,4 @@
+/*
 #include "../include/avl.h"
 
 int max(int a, int b) {
@@ -84,3 +85,4 @@ void imprimirInOrden(NodoAVL* raiz) {
     printf("<<%i# %s %i>>\n", raiz->alumno.id, raiz->alumno.nombre, raiz->alumno.edad);
     imprimirInOrden(raiz->der);
 }
+*/
