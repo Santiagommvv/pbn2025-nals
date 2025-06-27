@@ -10,11 +10,12 @@ typedef struct NodoMateria{
 
 // Funciones
 NodoMateria* agregarMateria(NodoMateria** cabeza, const char* nombre);
-void eliminarMateria(NodoMateria** cabeza, int id);
-void modificarMateria(NodoMateria* cabeza, int id);
+int eliminarMateria(NodoMateria** cabeza, int id);
+int modificarMateria(NodoMateria* cabeza, int id);
 void listarMaterias(NodoMateria* cabeza);
 NodoMateria* buscarMateriaPorID(NodoMateria* cabeza, int id);
 NodoMateria* buscarMateriaPorNombre(NodoMateria* cabeza, const char* nombre);
+void liberarListaMaterias(NodoMateria* lista);
 
 
 #endif // LISTA_MATERIA_H

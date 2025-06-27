@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lista_materia.h"
+#include "../datast/utils.h"
 
 static int ultimoIDMateria = 0;
 
@@ -25,7 +26,7 @@ NodoMateria* agregarMateria(NodoMateria** cabeza, const char* nombre) {
     return nodo;
 }
 
-void eliminarMateria(NodoMateria** cabeza, int id){
+int eliminarMateria(NodoMateria** cabeza, int id){
     NodoMateria* actual = *cabeza;
     NodoMateria* anterior = NULL;
 
@@ -38,24 +39,25 @@ void eliminarMateria(NodoMateria** cabeza, int id){
             }
             free(actual);
             printf("Materia con ID %d eliminada.\n", id);
-            return;
+            return 1;
         }
         anterior = actual;
         actual = actual->siguiente;
     }
     printf("Materia con ID %d no encontrada\n", id);
+    return 0;
 }
 
-void modificarMateria(NodoMateria* cabeza, int id){
+int modificarMateria(NodoMateria* cabeza, int id){
     while(cabeza) {
         if(cabeza->datos.id == id){
-            printf("Ingrese nuevo nombre para la materia: ");
-            scanf(" %[^\n]", cabeza->datos.nombre);
-            return;
+            pedirString("Ingrese nuevo nombre para la materia: ", cabeza->datos.nombre, MAX_NOMBRE);
+            return 1;
         }
         cabeza = cabeza->siguiente;
     }
     printf("Materia con ID %d no encontrada\n", id);
+    return 0;
 }
 
 void listarMaterias(NodoMateria* cabeza) {
@@ -77,6 +79,7 @@ NodoMateria* buscarMateriaPorID(NodoMateria* cabeza, int id){
         if(cabeza->datos.id == id){
             return cabeza;
         }
+        cabeza = cabeza->siguiente;
     }
     return NULL;
 }
@@ -88,4 +91,12 @@ NodoMateria* buscarMateriaPorNombre(NodoMateria* cabeza, const char* nombre){
         }
     }
     return NULL;
+}
+
+void liberarListaMaterias(NodoMateria* cabeza) {
+    while (cabeza) {
+        NodoMateria* tmp = cabeza;
+        cabeza = cabeza->siguiente;
+        free(tmp);
+    }
 }

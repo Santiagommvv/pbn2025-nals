@@ -29,5 +29,6 @@ NodoAVL* eliminarAlumnoAVL(NodoAVL* raiz, int id);
 NodoAVL* rotarDerecha(NodoAVL* y);
 NodoAVL* rotarIzquierda(NodoAVL* x);
 NodoAVL* insertarAVL(NodoAVL* nodo, Alumno alumno);
+void liberarAVL(NodoAVL* raiz);
 
 #endif //AVL_H

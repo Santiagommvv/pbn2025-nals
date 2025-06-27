@@ -2,6 +2,7 @@
 #define ALUMNO_H
 
 #include "config.h"
+#include "materia.h"
 
 typedef struct MateriaRendida{
     int IDMateria;
@@ -23,5 +24,6 @@ typedef struct Alumno{
 
 Alumno crearAlumno(const char* nombre, int edad);
 int rendirMateria(Alumno* alumno, int idMateria, float nota);
+int inscribirAlumnoEnMateria(Alumno* alumno, Materia* materia);
 
 #endif // ALUMNO_H

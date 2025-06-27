@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "avl.h"
+#include "../datast/utils.h"
+
 
 int max(int a, int b) {
     return (a > b) ? a : b;
@@ -60,7 +62,7 @@ NodoAVL* insertarAVL(NodoAVL* nodo, Alumno alumno) {
     nodo->altura = 1 + max(altura(nodo->izq), altura(nodo->der));
     int balanceo = balance(nodo);
 
-    // Rotaciones según el caso
+    // Rotaciones segun el caso
     if (balanceo > 1 && alumno.id < nodo->izq->alumno.id)
         return rotarDerecha(nodo);
 
@@ -242,10 +244,9 @@ void modificarAlumnoAVL(NodoAVL* raiz, int id){
     } else {
         // encontrado
         printf("Modificando alumno con ID %d\n", id);
-        printf("Ingrese nuevo nombre: \n");
-        scanf(" %[^\n]", raiz->alumno.nombre);
-        printf("Ingrese edad: ");
-        scanf("%d", &raiz->alumno.edad);
+
+        pedirString("Ingrese nuevo nombre: ", raiz->alumno.nombre, MAX_NOMBRE);
+        raiz->alumno.edad = pedirInt("Ingrese edad: ");
     }
 }
 
@@ -278,11 +279,11 @@ void listarMateriasAprobadas(Alumno* alumno, NodoMateria* listaMaterias){
 
 void listarMateriasRendidas(Alumno* alumno, NodoMateria* listaMaterias) {
     if(alumno->cantidadMateriasRendidas == 0){
-        printf("El alumno no ha rendido ningunua materia.\n");
+        printf("El alumno no ha rendido ninguna materia.\n");
         return;
     }
 
-    printf("Materias rendidas por %s", alumno->nombre);
+    printf("Materias rendidas por %s\n", alumno->nombre);
     for(int i = 0; i<alumno->cantidadMateriasRendidas; i++){
         MateriaRendida rendida = alumno->materiasRendidas[i];
         NodoMateria* materia = buscarMateriaPorID(listaMaterias, rendida.IDMateria);
@@ -290,4 +291,11 @@ void listarMateriasRendidas(Alumno* alumno, NodoMateria* listaMaterias) {
             printf("ID: %d | Nombre: %s | Nota: %.2f | Estado: %s\n", rendida.IDMateria, materia->datos.nombre, rendida.nota, rendida.aprobo ? "Aprobado" : "Desaprobado");
         }
     }
+}
+
+void liberarAVL(NodoAVL* nodo) {
+    if (!nodo) return;
+    liberarAVL(nodo->izq);
+    liberarAVL(nodo->der);
+    free(nodo);
 }

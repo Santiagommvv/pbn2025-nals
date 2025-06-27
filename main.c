@@ -9,6 +9,8 @@
 #include "datast/persistencia.h"
 #include "datast/paginado.h"
 #include "datast/randomizador.h"
+#include "datast/utils.h"
+
 
 void mostrarMenu(){
     printf("\n--- MENU ---\n");
@@ -38,27 +40,21 @@ int main() {
     cargarDatos(&alumnos, &listaMaterias);
 
     int opcion;
-    int IDAlumno, IDMateria;
     char nombre[100];
     int edad;
 
     do{
         mostrarMenu();
-        scanf("%d", &opcion);
-        getchar();
+        opcion = pedirInt("Ingrese una opcion: ");
 
         switch(opcion) {
             // Agregar alumno
             case 1: {
                 char nombre[100];
                 int edad;
-                printf("Ingrese nombre del alumno: ");
-                fgets(nombre, sizeof(nombre), stdin);
-                nombre[strcspn(nombre, "\n")] = '\0';
 
-                printf("Ingrese edad: ");
-                scanf("%d", &edad);
-                getchar();
+                pedirString("Ingrese nombre del alumno: ", nombre, MAX_NOMBRE);
+                edad = pedirInt("Ingrese edad: ");
 
                 Alumno nuevo = crearAlumno(nombre, edad);
                 alumnos = insertarAVL(alumnos, nuevo);
@@ -83,7 +79,7 @@ int main() {
                     printf("Alumno encontrado: ID: %d | Nombre: %s | Edad: %d\n",
                             alumno->alumno.id, alumno->alumno.nombre, alumno->alumno.edad);
                 } else {
-                printf("Alumno no encontrado");
+                printf("Alumno no encontrado\n");
                 }
                 break;
             }
@@ -91,12 +87,14 @@ int main() {
             // Buscar alumno por rango de edad
             case 4: {
                 int edadMin, edadMax;
-                printf("Ingrese edad minima: ");
-                scanf("%d", &edadMin);
-                getchar();
-                printf("Ingrese edad maxima");
-                scanf("%d", &edadMax);
-                getchar();
+                
+                edadMin = pedirInt("Ingrese edad minima: ");
+                edadMax = pedirInt("Ingrese edad maxima: ");
+
+                if (edadMax < edadMin) {
+                    printf("La edad maxima no puede ser menor que la minima.\n");
+                    break;
+                }
 
                 int encontrados = 0;
                 buscarAlumnosPorEdadAVL(alumnos, edadMin, edadMax, &encontrados);
@@ -110,31 +108,22 @@ int main() {
 
             //Modificar alumno
             case 5: {
-                printf("Ingrese ID del alumno a modificar: ");
-                scanf("%d", &IDAlumno);
-                getchar();
-
+                int IDAlumno = pedirInt("Ingrese ID del alumno a modificar: ");
                 modificarAlumnoAVL(alumnos, IDAlumno);
                 break;
             }
 
             //Eliminar alumno
             case 6: {
-                printf("Ingrese ID del alumno a eliminar: ");
-                scanf("%d", &IDAlumno);
-                getchar();
-
+                int IDAlumno = pedirInt("Ingrese ID del alumno a eliminar: ");
                 alumnos = eliminarAlumnoAVL(alumnos, IDAlumno);
                 break;
             }
 
             // Agregar materia
             case 7: {
-                char nombre[100];
-                printf("Ingrese nombre de la materia: ");
-                fgets(nombre, sizeof(nombre), stdin);
-                nombre[strcspn(nombre, "\n")] = '\0';
-
+                char nombre[MAX_NOMBRE];
+                pedirString("Ingrese nombre de la materia: ", nombre, MAX_NOMBRE);
                 agregarMateria(&listaMaterias, nombre);
                 printf("Materia agregada\n");
                 break;
@@ -147,31 +136,26 @@ int main() {
             
             // Modificar materia
             case 9: {
-            printf("Ingrese ID de la materia a modificar: ");
-            scanf("%d", &IDMateria);
-            getchar();
-
-            modificarMateria(listaMaterias, IDMateria);
-            break;
+                int IDMateria = pedirInt("Ingrese ID de la materia a modificar: ");
+                if(!modificarMateria(listaMaterias, IDMateria)) {
+                    printf("No se pudo modificar la materia.\n");
+                }
+                break;
             }
 
             // Eliminar materia
             case 10: {
-                printf("Ingrese el ID de la materia a eliminar: ");
-                scanf("%d", &IDMateria);
-                getchar();
-
-                eliminarMateria(&listaMaterias, IDMateria);
+                int IDMateria = pedirInt("Ingrese el ID de la materia a eliminar: ");
+                if (!eliminarMateria(&listaMaterias, IDMateria)) {
+                    printf("No se pudo eliminar la materia.\n");
+                }
                 break;
             }
 
             // Inscribir alumno en materia
             case 11: {
-
                 listarAlumnosPaginadoAVL(alumnos);
-                printf("Ingrese ID del alumno a inscribir: ");
-                scanf("%d", &IDAlumno);
-                getchar();
+                int IDAlumno = pedirInt("Ingrese ID del alumno a inscribir: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
                 if(!alumno) {
@@ -180,48 +164,27 @@ int main() {
                 }
 
                 listarMateriasPaginado(listaMaterias);
-                printf("Ingrese ID de la materia: ");
-                scanf("%d", &IDMateria);
-                getchar();
+                int IDMateria = pedirInt("Ingrese ID de la materia: ");
 
                 NodoMateria* materia = buscarMateriaPorID(listaMaterias, IDMateria);
                 if(!materia) {
                     printf("Materia no encontrada.\n");
                     break;
                 }
-
-                int yaInscripto = 0;
-                for(int i = 0; i<alumno->alumno.cantidadDeMateriasInscripto; i++){
-                    if(alumno->alumno.materiasInscripto[i] == IDMateria) {
-                        yaInscripto = 1;
-                        break;
-                    }
-                }
-
-                if(yaInscripto) {
-                    printf("El alumno ya esta inscripto en esta materia.\n");
-                    break;
-                }
-
-                if(alumno->alumno.cantidadDeMateriasInscripto < MAX_MATERIAS_POR_ALUMNO && materia->datos.cantidadAlumnos < MAX_ALUMNOS_POR_MATERIA){
-                    alumno->alumno.materiasInscripto[alumno->alumno.cantidadDeMateriasInscripto++] = IDMateria;
-                    materia->datos.alumnosInscriptos[materia->datos.cantidadAlumnos++] = IDAlumno;
-                    printf("Inscripcion realizada con exito.\n");
-                } else{
-                    printf("No se puede inscribir. Limite de materias alcanzado o cupo de materia lleno.\n");
+                if(!inscribirAlumnoEnMateria(&alumno->alumno, &materia->datos)) {
+                    printf("No se pudo inscribir al alumno.\n");
                 }
                 break;
             }
+
             // Rendir materia
             case 12: {
                 listarAlumnosPaginadoAVL(alumnos);
-                printf("Ingrese ID del alumno: ");
-                scanf("%d", &IDAlumno);
-                getchar();
+                int IDAlumno = pedirInt("Ingrese ID del alumno: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
                 if(!alumno){
-                    printf("Alumno no encontrado");
+                    printf("Alumno no encontrado\n");
                     break;
                 }
 
@@ -234,14 +197,8 @@ int main() {
                     }
                 }
 
-                printf("Ingrese ID de la materia a rendir: ");
-                scanf("%d", &IDMateria);
-                getchar();
-
-                printf("Ingrese nota obtenida: ");
-                float nota;
-                scanf("%f", &nota);
-                getchar();
+                int IDMateria = pedirInt("Ingrese ID de la materia a rendir: ");
+                float nota = pedirFloat("Ingrese nota obtenida: ");
 
                 rendirMateria(&alumno->alumno, IDMateria, nota);
                 break;
@@ -250,9 +207,7 @@ int main() {
             // Listar materias rendidas por un alumno
             case 13: {
                 listarAlumnosPaginadoAVL(alumnos);
-                printf("Ingrese ID del alumno: ");
-                scanf("%d", &IDAlumno);
-                getchar();
+                int IDAlumno = pedirInt("Ingrese ID del alumno: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
                 if(!alumno){
@@ -263,30 +218,21 @@ int main() {
                 listarMateriasRendidas(&alumno->alumno, listaMaterias);
                 break;
             }
-
+            
             case 14: {
-                int n;
-                printf("Cuantos alumnos desea generar? ");
-                scanf("%d", &n);
-                getchar();
+                int n = pedirInt("Cuantos alumnos desea generar? ");
                 generarAlumnosAleatorios(&alumnos, n);
                 break;
             }
-
             case 15: {
-                int n;
-                printf("Cuantas materias desea generar? ");
-                scanf("%d", &n);
-                getchar();
+                int n = pedirInt("Cuantas materias desea generar? ");
                 generarMateriasAleatorias(&listaMaterias, n);
                 break;
             }
-
             case 16: {
                 printf("Saliendo...\n");
                 break;
             }
-
 
             default:
             printf("Opcion invalida\n");
@@ -294,5 +240,7 @@ int main() {
     } while(opcion!= 16);
 
     guardarDatos(alumnos,listaMaterias);
+    liberarAVL(alumnos);
+    liberarListaMaterias(listaMaterias);
     return 0;
 }
