@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #endif
 #include "utils.h"
-#include "../include/config.h"
+#include "../config/config.h"
 
 // FUNCIONES AUXILIARES PARA EVITAR REPETICION DE CODIGO
 

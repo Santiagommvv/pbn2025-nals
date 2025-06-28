@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "avl.h"
-#include "../datast/utils.h"
+#include "../util/utils.h"
 
 // 2: FUNCIONES UTILITARIAS PARA MANEJO DEL AVL
 

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "persistencia.h"
-#include "../include/config.h"
+#include "../config/config.h"
 #include <sys/stat.h>
 #include "../dominio/lista_materia.h"
 

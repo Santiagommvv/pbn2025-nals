@@ -4,15 +4,15 @@
 #include <sys/stat.h>
 #include <time.h>
 
-#include "include/config.h"
+#include "config/config.h"
 #include "dominio/alumno.h"
 #include "dominio/avl.h"
 #include "dominio/materia.h"
 #include "dominio/lista_materia.h"
-#include "datast/persistencia.h"
-#include "datast/paginado.h"
-#include "datast/randomizador.h"
-#include "datast/utils.h"
+#include "extensiones/persistencia.h"
+#include "extensiones/paginado.h"
+#include "extensiones/randomizador.h"
+#include "util/utils.h"
 
 
 void mostrarMenu(){

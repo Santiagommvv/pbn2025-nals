@@ -3,7 +3,7 @@
 
 #include "../dominio/avl.h"
 #include "../dominio/lista_materia.h"
-#include "../include/config.h"
+#include "../config/config.h"
 
 // Paginado con funcionalidades adicionales (buscar, ordenar, etc.)
 void listarAlumnosPaginado(NodoAVL* raiz);

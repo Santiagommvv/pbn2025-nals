@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "paginado.h"
-#include "utils.h"
+#include "../util/utils.h"
 #include "../dominio/avl.h"
 #include "../dominio/alumno.h"
 #include "../dominio/lista_materia.h"
-#include "../include/config.h"
+#include "../config/config.h"
 
 // 2: PROTOTIPOS INTERNOS
 static void mostrarAlumnos(void* datos, int inicio, int fin);

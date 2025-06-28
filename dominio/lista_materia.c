@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "../include/config.h"
+#include "../config/config.h"
 #include "lista_materia.h"
-#include "../datast/utils.h"
+#include "../util/utils.h"
 
 // 2: PROTOTIPOS DE FUNCIONES
 static void capitalizarPrimeraLetra(char* texto);

@@ -1,7 +1,7 @@
 #ifndef MATERIA_H
 #define MATERIA_H
 
-#include "../include/config.h"
+#include "../config/config.h"
 
 typedef struct Materia{
     int id;

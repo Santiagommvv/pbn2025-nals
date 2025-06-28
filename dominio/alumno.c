@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include "alumno.h"
 #include "lista_materia.h"
-#include "../datast/utils.h"
+#include "../util/utils.h"
 
 
 // 2: VARIABLES GLOBALES
