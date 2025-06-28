@@ -506,15 +506,14 @@ int main() {
             case 14: {
                 int n;
                 do {
-                    n = pedirInt("¿Cuántos alumnos desea generar? (1-100): ");
-                    if (n <= 0 || n > 100) {
-                        printf("Error: Ingrese un número entre 1 y 100.\n");
+                    n = pedirInt("¿Cuántos alumnos desea generar? (mínimo 1): ");
+                    if (n <= 0) {
+                        printf("Error: Debe generar al menos 1 alumno.\n");
                     }
-                } while (n <= 0 || n > 100);
+                } while (n <= 0);
                 
-                printf("Generando %d alumnos aleatorios...\n", n);
+                printf("Intentando generar %d alumnos aleatorios...\n", n);
                 generarAlumnosAleatorios(&alumnos, n);
-                printf("Alumnos aleatorios generados correctamente.\n");
                 break;
             }
             case 15: {

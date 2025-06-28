@@ -29,8 +29,21 @@ NodoMateria* agregarMateria(NodoMateria** cabeza, const char* nombre) {
 
     nodo->datos.cantidadAlumnos = 0;
     nodo->datos.cantidadCorrelativas = 0;
-    nodo->siguiente = *cabeza;
-    *cabeza = nodo;
+    nodo->siguiente = NULL;
+    
+    // Agregar el nodo al final de la lista para mantener el orden de IDs ascendente
+    if (*cabeza == NULL) {
+        // Lista vacía, el nuevo nodo es la cabeza
+        *cabeza = nodo;
+    } else {
+        // Encontrar el último nodo
+        NodoMateria* ultimo = *cabeza;
+        while (ultimo->siguiente != NULL) {
+            ultimo = ultimo->siguiente;
+        }
+        // Agregar el nuevo nodo al final
+        ultimo->siguiente = nodo;
+    }
 
     return nodo;
 }
