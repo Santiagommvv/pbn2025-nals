@@ -71,6 +71,11 @@ static int contarMaterias(NodoMateria* cabeza){
 }
 
 void listarMateriasPaginado(NodoMateria* cabeza) {
+    if(!cabeza) {
+        printf("No hay materias para mostrar.\n");
+        return;
+    }
+    
     int total = contarMaterias(cabeza);
     if(total == 0) {
         printf("No hay materias para mostrar.\n");

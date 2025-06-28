@@ -7,6 +7,15 @@
 static int ultimoIDMateria = 0;
 
 NodoMateria* agregarMateria(NodoMateria** cabeza, const char* nombre) {
+    if (!cabeza) {
+        printf("Error: Puntero a cabeza es NULL\n");
+        return NULL;
+    }
+    
+    if (!nombre || nombre[0] == '\0') {
+        printf("Error: El nombre de la materia no puede ser NULL o vacío\n");
+        return NULL;
+    }
 
     NodoMateria* nodo = malloc(sizeof(NodoMateria));
     if(!nodo){
@@ -27,6 +36,11 @@ NodoMateria* agregarMateria(NodoMateria** cabeza, const char* nombre) {
 }
 
 int eliminarMateria(NodoMateria** cabeza, int id){
+    if (!cabeza || !(*cabeza)) {
+        printf("Error: No hay materias para eliminar\n");
+        return 0;
+    }
+    
     NodoMateria* actual = *cabeza;
     NodoMateria* anterior = NULL;
 
@@ -49,6 +63,11 @@ int eliminarMateria(NodoMateria** cabeza, int id){
 }
 
 int modificarMateria(NodoMateria* cabeza, int id){
+    if (!cabeza) {
+        printf("Error: No hay materias para modificar\n");
+        return 0;
+    }
+    
     while(cabeza) {
         if(cabeza->datos.id == id){
             pedirString("Ingrese nuevo nombre para la materia: ", cabeza->datos.nombre, MAX_NOMBRE);
@@ -85,6 +104,11 @@ NodoMateria* buscarMateriaPorID(NodoMateria* cabeza, int id){
 }
 
 NodoMateria* buscarMateriaPorNombre(NodoMateria* cabeza, const char* nombre){
+    if (!nombre) {
+        printf("Error: nombre no puede ser NULL\n");
+        return NULL;
+    }
+    
     while(cabeza){
         if(strcmp(cabeza->datos.nombre, nombre) == 0){
             return cabeza;

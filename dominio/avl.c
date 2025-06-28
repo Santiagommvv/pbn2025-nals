@@ -18,6 +18,8 @@ int balance(NodoAVL* n) {
 }
 
 NodoAVL* rotarDerecha(NodoAVL* y) {
+    if (!y || !y->izq) return y; // Verificar si y o y->izq es NULL
+    
     NodoAVL* x = y->izq;
     NodoAVL* T2 = x->der;
 
@@ -31,6 +33,8 @@ NodoAVL* rotarDerecha(NodoAVL* y) {
 }
 
 NodoAVL* rotarIzquierda(NodoAVL* x) {
+    if (!x || !x->der) return x; // Verificar si x o x->der es NULL
+    
     NodoAVL* y = x->der;
     NodoAVL* T2 = y->izq;
 
@@ -255,6 +259,11 @@ void listarMateriasAprobadas(Alumno* alumno, NodoMateria* listaMaterias){
         printf("Alumno no encontrado.\n");
         return;
     }
+    
+    if(!listaMaterias) {
+        printf("Lista de materias no disponible.\n");
+        return;
+    }
 
     int encontradas = 0;
 
@@ -278,6 +287,16 @@ void listarMateriasAprobadas(Alumno* alumno, NodoMateria* listaMaterias){
 }
 
 void listarMateriasRendidas(Alumno* alumno, NodoMateria* listaMaterias) {
+    if (!alumno) {
+        printf("Alumno no encontrado.\n");
+        return;
+    }
+    
+    if (!listaMaterias) {
+        printf("Lista de materias no disponible.\n");
+        return;
+    }
+    
     if(alumno->cantidadMateriasRendidas == 0){
         printf("El alumno no ha rendido ninguna materia.\n");
         return;

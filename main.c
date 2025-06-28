@@ -37,18 +37,28 @@ void cargarIDDesdeArchivo() {
     FILE* f = fopen("./data/ultimo_id.txt", "r");
     if(f) {
         int id;
-        if(fscanf(f, "%d", &id) == 1) {
+        if(fscanf(f, "%d", &id) == 1 && id > 0) {
             establecerUltimoID(id);
+            printf("ID cargado: %d\n", id);
+        } else {
+            printf("Error al leer el ID del archivo o ID inválido\n");
         }
         fclose(f);
+    } else {
+        printf("No se pudo abrir el archivo de IDs\n");
     }
 }
 
 void guardarIDEnArchivo() {
     FILE* f = fopen("./data/ultimo_id.txt", "w");
     if(f) {
-        fprintf(f, "%d\n", obtenerUltimoID());
+        int id = obtenerUltimoID();
+        if (fprintf(f, "%d\n", id) < 0) {
+            printf("Error al escribir el ID en el archivo\n");
+        }
         fclose(f);
+    } else {
+        printf("Error: No se pudo abrir el archivo para guardar el ID\n");
     }
 }
 
@@ -60,6 +70,9 @@ int main() {
     if (datosGuardadosDisponibles()) {
         printf("Cargando datos previos...\n");
         cargarDatos(&alumnos, &listaMaterias);
+        if (!alumnos && !listaMaterias) {
+            printf("Advertencia: No se pudieron cargar los datos correctamente.\n");
+        }
     } else {
         printf("Iniciando sistema vacío.\n");
         alumnos = NULL;
@@ -84,8 +97,20 @@ int main() {
                 edad = pedirInt("Ingrese edad: ");
 
                 Alumno nuevo = crearAlumno(nombre, edad);
-                alumnos = insertarAVL(alumnos, nuevo);
-                printf("Alumno agregado\n");
+                
+                // Verificar si el ID es válido (mayor que 0)
+                if (nuevo.id <= 0) {
+                    printf("Error: No se pudo crear el alumno\n");
+                    break;
+                }
+                
+                NodoAVL* resultado = insertarAVL(alumnos, nuevo);
+                if (resultado) {
+                    alumnos = resultado;
+                    printf("Alumno agregado correctamente\n");
+                } else {
+                    printf("Error: No se pudo agregar el alumno al árbol\n");
+                }
                 break;
             }
 
@@ -151,8 +176,13 @@ int main() {
             case 7: {
                 char nombre[MAX_NOMBRE];
                 pedirString("Ingrese nombre de la materia: ", nombre, MAX_NOMBRE);
-                agregarMateria(&listaMaterias, nombre);
-                printf("Materia agregada\n");
+                
+                NodoMateria* resultado = agregarMateria(&listaMaterias, nombre);
+                if (resultado) {
+                    printf("Materia agregada correctamente\n");
+                } else {
+                    printf("Error: No se pudo agregar la materia\n");
+                }
                 break;
             }
             

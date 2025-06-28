@@ -19,14 +19,21 @@ void establecerUltimoID(int id) {
 }
 
 Alumno crearAlumno(const char* nombre, int edad){
-
-    Alumno nuevoAlumno;
+    Alumno nuevoAlumno = {0}; // Inicializar a cero todos los campos
     
+    // Verificar si el nombre es NULL o vacío
+    if (!nombre || nombre[0] == '\0') {
+        printf("Ingrese un nombre válido\n");
+        return nuevoAlumno; // Retorna un alumno con ID=0 (inválido)
+    }
+    
+    // Si pasó las validaciones, ahora sí incrementamos el ID
     nuevoAlumno.id = ++ultimoID;
     strncpy(nuevoAlumno.nombre, nombre, MAX_NOMBRE-1);
     nuevoAlumno.nombre[MAX_NOMBRE-1] = '\0';
     nuevoAlumno.edad = edad;
     nuevoAlumno.cantidadDeMateriasInscripto = 0;
+    nuevoAlumno.cantidadMateriasRendidas = 0; 
     
     return nuevoAlumno;
 }

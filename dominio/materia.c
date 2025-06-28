@@ -4,8 +4,15 @@
 #include "materia.h"
 
 Materia crearMateria(const char* nombre){
-    Materia materia;
+    Materia materia = {0}; // Inicializar todos los campos a 0
     materia.id = -1;
+    
+    // Verificar si el nombre es NULL o vacío
+    if (!nombre || nombre[0] == '\0') {
+        printf("Error: El nombre de la materia no puede ser NULL o vacío\n");
+        return materia;
+    }
+    
     strncpy(materia.nombre, nombre, sizeof(materia.nombre)-1);
     materia.nombre[sizeof(materia.nombre)-1]='\0';
 
@@ -22,6 +29,18 @@ Materia crearMateria(const char* nombre){
 }
 
 int agregarCorrelativa(Materia* materia, int IDcorrelativa){
+    // Verificar si materia es NULL
+    if (!materia) {
+        printf("Error: Puntero a materia es NULL\n");
+        return 0;
+    }
+    
+    // Verificar que el ID de correlativa sea válido
+    if (IDcorrelativa <= 0) {
+        printf("Error: ID de correlativa inválido (%d)\n", IDcorrelativa);
+        return 0;
+    }
+    
     if(materia->cantidadCorrelativas >= MAX_CORRELATIVAS){
         return 0;
     }

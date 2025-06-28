@@ -27,6 +27,11 @@ Materia crearMateriaAleatoria(){
 }
 
 void generarAlumnosAleatorios(NodoAVL** raiz, int cantidad){
+    if (!raiz) {
+        printf("Error: Puntero a raíz es NULL\n");
+        return;
+    }
+    
     srand(time(NULL));
     for(int i=0; i<cantidad;i++){
         Alumno a = crearAlumnoAleatorio();
@@ -36,10 +41,18 @@ void generarAlumnosAleatorios(NodoAVL** raiz, int cantidad){
 }
 
 void generarMateriasAleatorias(NodoMateria** lista, int cantidad) {
+    if (!lista) {
+        printf("Error: Puntero a lista es NULL\n");
+        return;
+    }
+    
     srand(time(NULL));
     for(int i=0;i<cantidad;i++){
         Materia m= crearMateriaAleatoria();
-        agregarMateria(lista,m.nombre);
+        NodoMateria* resultado = agregarMateria(lista, m.nombre);
+        if (!resultado) {
+            printf("Error: No se pudo agregar la materia %s\n", m.nombre);
+        }
     }
     printf("%d materias aleatorias generadas.\n", cantidad);
 }

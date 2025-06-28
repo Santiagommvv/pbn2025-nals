@@ -4,6 +4,10 @@
 #include "utils.h"
 
 int pedirInt(const char* mensaje) {
+    if (!mensaje) {
+        mensaje = "Ingrese un número: "; // Mensaje predeterminado si es NULL
+    }
+    
     int numero;
     while (1) {
         printf("%s", mensaje);
@@ -17,6 +21,10 @@ int pedirInt(const char* mensaje) {
 }
 
 float pedirFloat(const char* mensaje) {
+    if (!mensaje) {
+        mensaje = "Ingrese un número: "; // Mensaje predeterminado si es NULL
+    }
+    
     float valor;
     while (1) {
         printf("%s", mensaje);
@@ -30,6 +38,10 @@ float pedirFloat(const char* mensaje) {
 }
 
 int esSoloLetrasYEspacios(const char* str) {
+    if (!str) {
+        return 0; // Si str es NULL, no es válido
+    }
+    
     for (int i = 0; str[i] != '\0'; i++) {
         if (!isalpha((unsigned char)str[i]) && !isspace((unsigned char)str[i])) {
             return 0; // contiene otro caracter
@@ -39,6 +51,14 @@ int esSoloLetrasYEspacios(const char* str) {
 }
 
 void pedirString(const char* mensaje, char* buffer, int tamanio) {
+    if (!buffer || tamanio <= 0) {
+        return; // No podemos proceder sin un buffer válido
+    }
+    
+    if (!mensaje) {
+        mensaje = "Ingrese un texto: "; // Mensaje predeterminado si es NULL
+    }
+    
     while(1) {
         printf("%s", mensaje);
         if (fgets(buffer, tamanio, stdin) != NULL) {

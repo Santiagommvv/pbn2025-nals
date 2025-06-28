@@ -13,7 +13,7 @@ int datosGuardadosDisponibles() {
 
 //Guardar
 static void guardarAlumnosCSV(NodoAVL* a, FILE* f){
-    if (!a) return;
+    if (!a || !f) return;
     
     guardarAlumnosCSV(a->izq, f);
     
@@ -41,6 +41,8 @@ static void guardarAlumnosCSV(NodoAVL* a, FILE* f){
 }
 
 static void guardarMateriasCSV(NodoMateria* m, FILE* f){
+    if (!f) return;
+    
     while(m){
         Materia mat = m->datos;
         fprintf(f,"%d, %s", mat.id, mat.nombre);
@@ -56,10 +58,15 @@ static void guardarMateriasCSV(NodoMateria* m, FILE* f){
 void guardarDatos(NodoAVL* alumnos, NodoMateria* materias){
     FILE* fa = fopen(ALUMNOS_CSV, "w");
     FILE* fm = fopen(MATERIAS_CSV, "w");
-    if(!fa||!fm){puts("Error abriendo archivos para guardar"); return;}
+    if(!fa || !fm){
+        puts("Error abriendo archivos para guardar");
+        if(fa) fclose(fa);
+        if(fm) fclose(fm);
+        return;
+    }
 
     guardarAlumnosCSV(alumnos, fa);
-    guardarMateriasCSV(materias,fm);
+    guardarMateriasCSV(materias, fm);
 
     fclose(fa); fclose(fm);
     puts("Datos guardados.");
@@ -67,16 +74,24 @@ void guardarDatos(NodoAVL* alumnos, NodoMateria* materias){
 
 //Cargar
 static void split(char* s, char* delim, char*** out, int* count){
+    if (!s || !delim || !out || !count) return;
+    
     *count = 0; *out=NULL;
     char* tok=strtok(s, delim);
     while(tok){
         *out = realloc(*out,(*count+1) *sizeof(char*));
+        if (!*out) {
+            *count = 0;
+            return; // Error de memoria
+        }
         (*out)[(*count)++]=tok;
         tok=strtok(NULL, delim);
     }
 }
 
 static void cargarAlumnosCSV(NodoAVL** lista, FILE* f){
+    if (!lista || !f) return;
+    
     char linea[512];
     while(fgets(linea,sizeof(linea),f)){
         Alumno al = {0};
@@ -120,6 +135,8 @@ static void cargarAlumnosCSV(NodoAVL** lista, FILE* f){
 }
 
 static void cargarMateriasCSV(NodoMateria** lista, FILE* f){
+    if (!lista || !f) return;
+    
     char linea[256];
     while(fgets(linea,sizeof(linea),f)){
         Materia m={0};
@@ -139,14 +156,18 @@ static void cargarMateriasCSV(NodoMateria** lista, FILE* f){
             for(int k=0;k<n;k++) m.alumnosInscriptos[m.cantidadAlumnos++]=atoi(ids[k]);
             free(ids);
         }
-        agregarMateria(lista,m.nombre);
+        NodoMateria* resultado = agregarMateria(lista,m.nombre);
+        if (!resultado) {
+            printf("Error: No se pudo agregar la materia %s\n", m.nombre);
+        }
     }
 }
 
 void cargarDatos(NodoAVL** alumnos, NodoMateria** materias){
+    if (!alumnos || !materias) return;
+    
     FILE* fa=fopen(ALUMNOS_CSV, "r");
     FILE* fm=fopen(MATERIAS_CSV, "r");
     if(fa){ cargarAlumnosCSV(alumnos, fa); fclose(fa);}
     if(fm){ cargarMateriasCSV(materias, fm); fclose(fm);}
-
 }

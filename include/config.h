@@ -8,6 +8,10 @@
 #define MAX_CORRELATIVAS 5
 #define MAX_NOMBRE 100
 
+#define NOTA_MINIMA 0.0
+#define NOTA_MAXIMA 10.0
+#define NOTA_APROBACION 4.0
+
 #define TRUE 1
 #define FALSE 0
 
