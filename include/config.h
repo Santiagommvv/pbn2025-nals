@@ -8,6 +8,9 @@
 #define MAX_CORRELATIVAS 5
 #define MAX_NOMBRE 100
 
+#define EDAD_MINIMA 18
+#define EDAD_MAXIMA 99
+
 #define NOTA_MINIMA 0.0
 #define NOTA_MAXIMA 10.0
 #define NOTA_APROBACION 4.0

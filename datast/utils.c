@@ -2,6 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "utils.h"
+#include "../include/config.h"
 
 int pedirInt(const char* mensaje) {
     if (!mensaje) {
@@ -69,4 +70,8 @@ void pedirString(const char* mensaje, char* buffer, int tamanio) {
         } 
         printf("Entrada invalida. Ingrese solo letras y espacios\n");
     }
+}
+
+int edadValida(int edad) {
+    return (edad >= EDAD_MINIMA && edad <= EDAD_MAXIMA);
 }
