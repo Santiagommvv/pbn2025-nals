@@ -117,7 +117,7 @@ NodoAVL* buscarAlumnoPorNombreAVL(NodoAVL* raiz, const char* nombre){
     if(izq) return izq;
 
     // Comparar nombre actual
-    if(strcmp(raiz->alumno.nombre, nombre)==0){
+    if(strcasecmp(raiz->alumno.nombre, nombre)==0){
         return raiz;
     }
 
@@ -226,8 +226,7 @@ void buscarAlumnosPorEdadAVL(NodoAVL* raiz, int edadMin, int edadMax, int* encon
     // verificar alumno actual
     int edad = raiz->alumno.edad;
     if(edad >= edadMin && edad <= edadMax) {
-        Alumno a = raiz->alumno;
-        printf("ID: %d | Nombre: %s | Edad: %d | Materias inscriptas: %d\n", a.id, a.nombre, a.edad, a.cantidadDeMateriasInscripto);
+        visualizarAlumno(raiz->alumno, 0); // Usar la funcion comun
         (*encontrados)++;
     }
 

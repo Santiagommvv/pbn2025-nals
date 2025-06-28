@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "utils.h"
 #include "../include/config.h"
 
+// Funciones para entrada de datos
 int pedirInt(const char* mensaje) {
     if (!mensaje) {
         mensaje = "Ingrese un número: "; // Mensaje predeterminado si es NULL
@@ -74,4 +76,22 @@ void pedirString(const char* mensaje, char* buffer, int tamanio) {
 
 int edadValida(int edad) {
     return (edad >= EDAD_MINIMA && edad <= EDAD_MAXIMA);
+}
+
+// Funcion para buscar subcadenas sin distinguir mayusculas/minusculas
+char* strcasestr(const char* haystack, const char* needle) {
+    if (!haystack || !needle) return NULL;
+    
+    size_t haystack_len = strlen(haystack);
+    size_t needle_len = strlen(needle);
+    
+    if (haystack_len < needle_len) return NULL;
+    
+    for (size_t i = 0; i <= haystack_len - needle_len; i++) {
+        if (strncasecmp(haystack + i, needle, needle_len) == 0) {
+            return (char*)(haystack + i);
+        }
+    }
+    
+    return NULL;
 }

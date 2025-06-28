@@ -7,9 +7,9 @@ Materia crearMateria(const char* nombre){
     Materia materia = {0}; // Inicializar todos los campos a 0
     materia.id = -1;
     
-    // Verificar si el nombre es NULL o vacío
+    // Verificar si el nombre es NULL o vacio
     if (!nombre || nombre[0] == '\0') {
-        printf("Error: El nombre de la materia no puede ser NULL o vacío\n");
+        printf("Error: El nombre de la materia no puede ser NULL o vacio\n");
         return materia;
     }
     
@@ -35,9 +35,9 @@ int agregarCorrelativa(Materia* materia, int IDcorrelativa){
         return 0;
     }
     
-    // Verificar que el ID de correlativa sea válido
+    // Verificar que el ID de correlativa sea valido
     if (IDcorrelativa <= 0) {
-        printf("Error: ID de correlativa inválido (%d)\n", IDcorrelativa);
+        printf("Error: ID de correlativa invalido (%d)\n", IDcorrelativa);
         return 0;
     }
     

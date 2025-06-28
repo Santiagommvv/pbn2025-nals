@@ -13,7 +13,7 @@ NodoMateria* agregarMateria(NodoMateria** cabeza, const char* nombre) {
     }
     
     if (!nombre || nombre[0] == '\0') {
-        printf("Error: El nombre de la materia no puede ser NULL o vacío\n");
+        printf("Error: El nombre de la materia no puede ser NULL o vacio\n");
         return NULL;
     }
 
@@ -33,10 +33,10 @@ NodoMateria* agregarMateria(NodoMateria** cabeza, const char* nombre) {
     
     // Agregar el nodo al final de la lista para mantener el orden de IDs ascendente
     if (*cabeza == NULL) {
-        // Lista vacía, el nuevo nodo es la cabeza
+        // Lista vacia, el nuevo nodo es la cabeza
         *cabeza = nodo;
     } else {
-        // Encontrar el último nodo
+        // Encontrar el ultimo nodo
         NodoMateria* ultimo = *cabeza;
         while (ultimo->siguiente != NULL) {
             ultimo = ultimo->siguiente;
@@ -100,8 +100,7 @@ void listarMaterias(NodoMateria* cabeza) {
 
     printf("Listado de materias:\n");
     while(cabeza){
-        Materia m = cabeza->datos;
-        printf("ID: %d | Nombre: %s | Inscriptos: %d\n", m.id, m.nombre,m.cantidadAlumnos);
+        visualizarMateria(cabeza->datos, 0); // Usar la funcion comun
         cabeza = cabeza->siguiente;
     }
 }
@@ -123,7 +122,7 @@ NodoMateria* buscarMateriaPorNombre(NodoMateria* cabeza, const char* nombre){
     }
     
     while(cabeza){
-        if(strcmp(cabeza->datos.nombre, nombre) == 0){
+        if(strcasecmp(cabeza->datos.nombre, nombre) == 0){
             return cabeza;
         }
         cabeza = cabeza->siguiente;
@@ -136,5 +135,25 @@ void liberarListaMaterias(NodoMateria* cabeza) {
         NodoMateria* tmp = cabeza;
         cabeza = cabeza->siguiente;
         free(tmp);
+    }
+}
+
+int contarNodosMaterias(NodoMateria* cabeza) {
+    int count = 0;
+    while (cabeza) {
+        count++;
+        cabeza = cabeza->siguiente;
+    }
+    return count;
+}
+
+// Funcion comun para visualizar una materia con formato
+void visualizarMateria(Materia m, int formatoAvanzado) {
+    if (formatoAvanzado) {
+        printf("%-5d | %-30s | %-20d\n",
+               m.id, m.nombre, m.cantidadAlumnos);
+    } else {
+        printf("ID: %d | Nombre: %s | Cantidad de Alumnos: %d\n",
+               m.id, m.nombre, m.cantidadAlumnos);
     }
 }

@@ -27,5 +27,7 @@ void establecerUltimoID(int id);
 Alumno crearAlumno(const char* nombre, int edad);
 int rendirMateria(Alumno* alumno, int idMateria, float nota);
 int inscribirAlumnoEnMateria(Alumno* alumno, Materia* materia);
+// Función común para visualizar un alumno con formato
+void visualizarAlumno(Alumno a, int formatoAvanzado);
 
 #endif // ALUMNO_H
