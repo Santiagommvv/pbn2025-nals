@@ -102,7 +102,7 @@ static void mostrarAlumnos(void* datos, int inicio, int fin) {
     Alumno* alumnos = (Alumno*)datos;
     mostrarEncabezadoAlumnos();
     for (int i = inicio; i < fin; i++) {
-        visualizarAlumno(alumnos[i], 1); // 1 = formato avanzado
+        visualizarAlumno(alumnos[i], 1);
     }
 }
 
@@ -123,7 +123,7 @@ static void mostrarMaterias(void* datos, int inicio, int fin) {
     
     // Mostrar las materias en el orden de la lista
     for (int j = 0; j < cantidadMaterias; j++) {
-        visualizarMateria(materiasArray[j]->datos, 1); // 1 = formato avanzado
+        visualizarMateria(materiasArray[j]->datos, 1);
     }
     
     free(materiasArray);
@@ -138,7 +138,7 @@ static void pausarYLimpiar() {
 }
 
 // 5: PAGINADO DE ALUMNOS
-// Funcion para paginado avanzado de alumnos
+// Funcion para paginado de alumnos
 void listarAlumnosPaginado(NodoAVL* raiz) {
     if (!raiz) {
         printf("No hay alumnos para mostrar.\n");
@@ -285,7 +285,7 @@ void listarAlumnosPaginado(NodoAVL* raiz) {
 }
 
 // 6: PAGINADO DE MATERIAS
-// Funcion para paginado avanzado de materias
+// Funcion para paginado de materias
 void listarMateriasPaginado(NodoMateria* cabeza) {
     if (!cabeza) {
         printf("No hay materias para mostrar.\n");
