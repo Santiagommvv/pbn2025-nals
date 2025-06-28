@@ -89,6 +89,7 @@ NodoMateria* buscarMateriaPorNombre(NodoMateria* cabeza, const char* nombre){
         if(strcmp(cabeza->datos.nombre, nombre) == 0){
             return cabeza;
         }
+        cabeza = cabeza->siguiente;
     }
     return NULL;
 }

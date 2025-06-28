@@ -12,10 +12,12 @@ typedef struct Materia{
     
     int correlativas[MAX_CORRELATIVAS];
     int cantidadCorrelativas;
-
 } Materia;
-#endif // MATERIA_H
+
 
 Materia crearMateria(const char* nombre);
 int agregarCorrelativa(Materia* materia, int idCorrelativa);
+
+#endif // MATERIA_H
+
 
