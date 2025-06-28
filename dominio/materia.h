@@ -17,6 +17,7 @@ typedef struct Materia{
 
 Materia crearMateria(const char* nombre);
 int agregarCorrelativa(Materia* materia, int idCorrelativa);
+int eliminarAlumnoDeMateria(Materia* materia, int idAlumno);
 
 #endif // MATERIA_H
 
