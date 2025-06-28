@@ -1,8 +1,12 @@
+// 1: INCLUDES
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "materia.h"
 
+// 2: FUNCIONES BASICAS
+// crea una materia
 Materia crearMateria(const char* nombre){
     Materia materia = {0}; // Inicializar todos los campos a 0
     materia.id = -1;
@@ -27,7 +31,7 @@ Materia crearMateria(const char* nombre){
     }
     return materia;
 }
-
+// agregar materia correlativa
 int agregarCorrelativa(Materia* materia, int IDcorrelativa){
     // Verificar si materia es NULL
     if (!materia) {
@@ -81,10 +85,6 @@ int eliminarAlumnoDeMateria(Materia* materia, int idAlumno) {
     }
     
     // Decrementar el contador de alumnos
-    materia->cantidadAlumnos--;
-    
-    // Establecer el ultimo elemento como -1 (indicador de espacio libre)
-    materia->alumnosInscriptos[materia->cantidadAlumnos] = -1;
-    
+    materia->cantidadAlumnos--;   
     return 1;
 }

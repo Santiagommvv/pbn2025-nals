@@ -1,19 +1,125 @@
+// INCLUDES
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "../include/config.h"
 #include "lista_materia.h"
 #include "../datast/utils.h"
 
-static int ultimoIDMateria = 0;
+// 2: PROTOTIPOS DE FUNCIONES
+static void capitalizarPrimeraLetra(char* texto);
+static void obtenerNombreCapitalizado(const char* nombre, char* buffer, size_t tamano);
+static void formatearCorrelativasComoString(Materia m, char* buffer, size_t tamano);
+static void mostrarCorrelativa(int idCorrelativa, NodoMateria* cabeza, int conIndice, int indice);
+static void agregarNodoAlFinal(NodoMateria** cabeza, NodoMateria* nuevoNodo);
 
+// 3: VARIABLES GLOBALES
+static int ultimoIDMateria = 0;
 // Variable global para almacenar la lista de materias (para referencias internas)
 static NodoMateria* listaMateriaGlobal = NULL;
 
+// FUNCIONES AUXILIARES
+
+// Funcion para capitalizar la primera letra de una cadena
+static void capitalizarPrimeraLetra(char* texto) {
+    if (texto && *texto) {
+        *texto = toupper((unsigned char)*texto);
+    }
+}
+
+// Funcion auxiliar para obtener nombre capitalizado
+static void obtenerNombreCapitalizado(const char* nombre, char* buffer, size_t tamano) {
+    if (!nombre || !buffer || tamano <= 0) return;
+    
+    strncpy(buffer, nombre, tamano - 1);
+    buffer[tamano - 1] = '\0';
+    capitalizarPrimeraLetra(buffer);
+}
+
+// Función auxiliar para formatear correlativas como string
+static void formatearCorrelativasComoString(Materia m, char* buffer, size_t tamano) {
+    if (!buffer || tamano <= 0) return;
+    
+    buffer[0] = '\0'; // Inicializar la cadena vacía
+    
+    if (m.cantidadCorrelativas > 0) {
+        int pos = 0;
+        for (int i = 0; i < m.cantidadCorrelativas && pos < tamano - 1; i++) {
+            int idCorrelativa = m.correlativas[i];
+            NodoMateria* materiaCorrelativa = buscarMateriaPorID(NULL, idCorrelativa);
+            
+            if (materiaCorrelativa) {
+                char nombreCorrelativaCapitalizado[100];
+                obtenerNombreCapitalizado(materiaCorrelativa->datos.nombre, 
+                                        nombreCorrelativaCapitalizado, 
+                                        sizeof(nombreCorrelativaCapitalizado));
+                
+                pos += snprintf(buffer + pos, tamano - pos, "%s %d", 
+                                nombreCorrelativaCapitalizado, idCorrelativa);
+            } else {
+                pos += snprintf(buffer + pos, tamano - pos, "(%d)", idCorrelativa);
+            }
+            
+            if (i < m.cantidadCorrelativas - 1 && pos < tamano - 2) {
+                pos += snprintf(buffer + pos, tamano - pos, ", ");
+            }
+        }
+    } else if (m.id >= ID_MATERIAS_AVANZADAS) {
+        snprintf(buffer, tamano, "*Todas las materias anteriores*");
+    } else {
+        snprintf(buffer, tamano, "Ninguna");
+    }
+}
+
+// Función auxiliar para mostrar una correlativa
+static void mostrarCorrelativa(int idCorrelativa, NodoMateria* cabeza, int conIndice, int indice) {
+    NodoMateria* correlativa = buscarMateriaPorID(cabeza, idCorrelativa);
+    
+    if (conIndice) {
+        printf("  %d. ", indice);
+    } else {
+        printf("    - ");
+    }
+    
+    if (correlativa) {
+        char nombreCorrelativaCapitalizado[100];
+        obtenerNombreCapitalizado(correlativa->datos.nombre, 
+                                nombreCorrelativaCapitalizado, 
+                                sizeof(nombreCorrelativaCapitalizado));
+        
+        printf("%s %d", nombreCorrelativaCapitalizado, idCorrelativa);
+    } else {
+        printf("%d", idCorrelativa);
+        if (conIndice) printf(" (Materia no encontrada)");
+    }
+    
+    printf("\n");
+}
+// Función auxiliar para agregar un nodo al final de la lista
+static void agregarNodoAlFinal(NodoMateria** cabeza, NodoMateria* nuevoNodo) {
+    if (!cabeza || !nuevoNodo) return;
+    
+    if (*cabeza == NULL) {
+        // Lista vacía, el nuevo nodo es la cabeza
+        *cabeza = nuevoNodo;
+    } else {
+        // Encontrar el último nodo
+        NodoMateria* ultimo = *cabeza;
+        while (ultimo->siguiente != NULL) {
+            ultimo = ultimo->siguiente;
+        }
+        // Agregar el nuevo nodo al final
+        ultimo->siguiente = nuevoNodo;
+    }
+}
 // Funcion para actualizar la referencia global
 void actualizarReferenciaMaterias(NodoMateria* lista) {
     listaMateriaGlobal = lista;
 }
+
+// 4: FUNCIONES BASICAS DE LISTA
 
 NodoMateria* agregarMateria(NodoMateria** cabeza, const char* nombre) {
     if (!cabeza) {
@@ -41,18 +147,7 @@ NodoMateria* agregarMateria(NodoMateria** cabeza, const char* nombre) {
     nodo->siguiente = NULL;
     
     // Agregar el nodo al final de la lista para mantener el orden de IDs ascendente
-    if (*cabeza == NULL) {
-        // Lista vacia, el nuevo nodo es la cabeza
-        *cabeza = nodo;
-    } else {
-        // Encontrar el ultimo nodo
-        NodoMateria* ultimo = *cabeza;
-        while (ultimo->siguiente != NULL) {
-            ultimo = ultimo->siguiente;
-        }
-        // Agregar el nuevo nodo al final
-        ultimo->siguiente = nodo;
-    }
+    agregarNodoAlFinal(cabeza, nodo);
     
     // Actualizar la referencia global
     actualizarReferenciaMaterias(*cabeza);
@@ -91,35 +186,25 @@ int eliminarMateria(NodoMateria** cabeza, int id){
     return 0;
 }
 
-int modificarMateria(NodoMateria* cabeza, int id){
-    if (!cabeza) {
-        printf("Error: No hay materias para modificar\n");
-        return 0;
-    }
-    
-    while(cabeza) {
-        if(cabeza->datos.id == id){
-            pedirString("Ingrese nuevo nombre para la materia: ", cabeza->datos.nombre, MAX_NOMBRE);
-            return 1;
-        }
+// liberar la memoria ocupada por la lista
+void liberarListaMaterias(NodoMateria* cabeza) {
+    while (cabeza) {
+        NodoMateria* tmp = cabeza;
         cabeza = cabeza->siguiente;
-    }
-    printf("Materia con ID %d no encontrada\n", id);
-    return 0;
-}
-
-void listarMaterias(NodoMateria* cabeza) {
-    if(!cabeza) {
-        printf("No hay materias para mostrar");
-        return;
-    }
-
-    printf("Listado de materias:\n");
-    while(cabeza){
-        visualizarMateria(cabeza->datos, 0); // Usar la funcion comun
-        cabeza = cabeza->siguiente;
+        free(tmp);
     }
 }
+// contar el numero de materias en la lista
+int contarNodosMaterias(NodoMateria* cabeza) {
+    int count = 0;
+    while (cabeza) {
+        count++;
+        cabeza = cabeza->siguiente;
+    }
+    return count;
+}
+
+// 5: FUNCIONES DE BUSQUEDA
 
 NodoMateria* buscarMateriaPorID(NodoMateria* cabeza, int id){
     // Si cabeza es NULL, usar la referencia global
@@ -151,99 +236,42 @@ NodoMateria* buscarMateriaPorNombre(NodoMateria* cabeza, const char* nombre){
     return NULL;
 }
 
-void liberarListaMaterias(NodoMateria* cabeza) {
-    while (cabeza) {
-        NodoMateria* tmp = cabeza;
-        cabeza = cabeza->siguiente;
-        free(tmp);
-    }
-}
+// 6: FUNCIONES DE VISUALIZACION
 
-int contarNodosMaterias(NodoMateria* cabeza) {
-    int count = 0;
-    while (cabeza) {
-        count++;
-        cabeza = cabeza->siguiente;
+void listarMaterias(NodoMateria* cabeza) {
+    if(!cabeza) {
+        printf("No hay materias para mostrar");
+        return;
     }
-    return count;
-}
 
-// Funcion para capitalizar la primera letra de una cadena
-static void capitalizarPrimeraLetra(char* texto) {
-    if (texto && *texto) {
-        *texto = toupper((unsigned char)*texto);
+    printf("Listado de materias:\n");
+    while(cabeza){
+        visualizarMateria(cabeza->datos, 0); // Usar la funcion comun
+        cabeza = cabeza->siguiente;
     }
 }
 
 // Funcion comun para visualizar una materia con formato
 void visualizarMateria(Materia m, int formatoAvanzado) {
-    // Crear copia del nombre para capitalizar la primera letra
     char nombreCapitalizado[100];
-    strncpy(nombreCapitalizado, m.nombre, sizeof(nombreCapitalizado) - 1);
-    nombreCapitalizado[sizeof(nombreCapitalizado) - 1] = '\0';
-    capitalizarPrimeraLetra(nombreCapitalizado);
+    obtenerNombreCapitalizado(m.nombre, nombreCapitalizado, sizeof(nombreCapitalizado));
     
     if (formatoAvanzado) {
         // Formatear las correlativas como string
-        char correlativas[200] = "";
-        if (m.cantidadCorrelativas > 0) {
-            int pos = 0;
-            for (int i = 0; i < m.cantidadCorrelativas && pos < 199; i++) {
-                int idCorrelativa = m.correlativas[i];
-                // Buscar la materia correlativa para mostrar su nombre
-                NodoMateria* materiaCorrelativa = buscarMateriaPorID(NULL, idCorrelativa);
-                
-                if (materiaCorrelativa) {
-                    // Copiar y capitalizar el nombre de la correlativa
-                    char nombreCorrelativaCapitalizado[100];
-                    strncpy(nombreCorrelativaCapitalizado, materiaCorrelativa->datos.nombre, sizeof(nombreCorrelativaCapitalizado) - 1);
-                    nombreCorrelativaCapitalizado[sizeof(nombreCorrelativaCapitalizado) - 1] = '\0';
-                    capitalizarPrimeraLetra(nombreCorrelativaCapitalizado);
-                    
-                    pos += snprintf(correlativas + pos, 199 - pos, "%s %d", 
-                                    nombreCorrelativaCapitalizado, idCorrelativa);
-                } else {
-                    // Si no se encuentra la materia, mostrar solo el ID
-                    pos += snprintf(correlativas + pos, 199 - pos, "(%d)", idCorrelativa);
-                }
-                
-                if (i < m.cantidadCorrelativas - 1 && pos < 198) {
-                    pos += snprintf(correlativas + pos, 199 - pos, ", ");
-                }
-            }
-        } else if (m.id >= ID_MATERIAS_AVANZADAS) {
-            snprintf(correlativas, 199, "*Todas las materias anteriores*");
-        } else {
-            snprintf(correlativas, 199, "Ninguna");
-        }
+        char correlativas[200];
+        formatearCorrelativasComoString(m, correlativas, sizeof(correlativas));
         
         printf("%-5d | %-30s | %-20d | %-40s\n",
-               m.id, nombreCapitalizado, m.cantidadAlumnos, correlativas);
+                m.id, nombreCapitalizado, m.cantidadAlumnos, correlativas);
     } else {
         printf("ID: %d | Nombre: %s | Cantidad de Alumnos: %d", 
-               m.id, nombreCapitalizado, m.cantidadAlumnos);
+                m.id, nombreCapitalizado, m.cantidadAlumnos);
         
         // Mostrar correlativas si las tiene
         if (m.cantidadCorrelativas > 0) {
             printf(" | Correlativas: \n");
             for (int i = 0; i < m.cantidadCorrelativas; i++) {
-                int idCorrelativa = m.correlativas[i];
-                NodoMateria* materiaCorrelativa = buscarMateriaPorID(NULL, idCorrelativa);
-                
-                printf("    - ");
-                if (materiaCorrelativa) {
-                    // Copiar y capitalizar el nombre de la correlativa
-                    char nombreCorrelativaCapitalizado[100];
-                    strncpy(nombreCorrelativaCapitalizado, materiaCorrelativa->datos.nombre, sizeof(nombreCorrelativaCapitalizado) - 1);
-                    nombreCorrelativaCapitalizado[sizeof(nombreCorrelativaCapitalizado) - 1] = '\0';
-                    capitalizarPrimeraLetra(nombreCorrelativaCapitalizado);
-                    
-                    printf("%s %d", nombreCorrelativaCapitalizado, idCorrelativa);
-                } else {
-                    printf("%d", idCorrelativa);
-                }
-                
-                printf("\n");
+                mostrarCorrelativa(m.correlativas[i], NULL, 0, 0);
             }
         }
         
@@ -254,6 +282,25 @@ void visualizarMateria(Materia m, int formatoAvanzado) {
             printf("\n");
         }
     }
+}
+
+// 7: FUNCIONES DE MODIFICACION
+
+int modificarMateria(NodoMateria* cabeza, int id){
+    if (!cabeza) {
+        printf("Error: No hay materias para modificar\n");
+        return 0;
+    }
+    
+    while(cabeza) {
+        if(cabeza->datos.id == id){
+            pedirString("Ingrese nuevo nombre para la materia: ", cabeza->datos.nombre, MAX_NOMBRE);
+            return 1;
+        }
+        cabeza = cabeza->siguiente;
+    }
+    printf("Materia con ID %d no encontrada\n", id);
+    return 0;
 }
 
 // Funcion para agregar o modificar correlatividades de una materia
@@ -269,11 +316,9 @@ int modificarCorrelativasMateria(NodoMateria* cabeza, int id) {
         return 0;
     }
     
-    // Mostrar informacion actual de la materia
+    // Mostrar información actual de la materia
     char nombreCapitalizado[100];
-    strncpy(nombreCapitalizado, materia->datos.nombre, sizeof(nombreCapitalizado) - 1);
-    nombreCapitalizado[sizeof(nombreCapitalizado) - 1] = '\0';
-    capitalizarPrimeraLetra(nombreCapitalizado);
+    obtenerNombreCapitalizado(materia->datos.nombre, nombreCapitalizado, sizeof(nombreCapitalizado));
     
     printf("Materia: %s (ID: %d)\n", nombreCapitalizado, materia->datos.id);
     
@@ -281,20 +326,7 @@ int modificarCorrelativasMateria(NodoMateria* cabeza, int id) {
     printf("Correlativas actuales: \n");
     if (materia->datos.cantidadCorrelativas > 0) {
         for (int i = 0; i < materia->datos.cantidadCorrelativas; i++) {
-            int idCorrelativa = materia->datos.correlativas[i];
-            NodoMateria* correlativa = buscarMateriaPorID(cabeza, idCorrelativa);
-            
-            printf("  %d. ", i+1);
-            if (correlativa) {
-                char nombreCorrelativaCapitalizado[100];
-                strncpy(nombreCorrelativaCapitalizado, correlativa->datos.nombre, sizeof(nombreCorrelativaCapitalizado) - 1);
-                nombreCorrelativaCapitalizado[sizeof(nombreCorrelativaCapitalizado) - 1] = '\0';
-                capitalizarPrimeraLetra(nombreCorrelativaCapitalizado);
-                
-                printf("%s %d\n", nombreCorrelativaCapitalizado, idCorrelativa);
-            } else {
-                printf("%d (Materia no encontrada)\n", idCorrelativa);
-            }
+            mostrarCorrelativa(materia->datos.correlativas[i], cabeza, 1, i+1);
         }
     } else {
         printf("  Ninguna\n");
@@ -336,7 +368,7 @@ int modificarCorrelativasMateria(NodoMateria* cabeza, int id) {
             continue;
         }
         
-        // Validar que no se este agregando a si misma como correlativa
+        // Validar que no se esté agregando a sí misma como correlativa
         if (idCorrelativa == materia->datos.id) {
             printf("Error: Una materia no puede ser correlativa de si misma.\n");
             continue;

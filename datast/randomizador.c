@@ -1,8 +1,12 @@
+// 1: INCLUDES
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include "randomizador.h"
+
+// 2: DATOS CONSTANTES
 
 // Nombres y apellidos base - Ampliados para permitir mas combinaciones
 const char* nombres[] = {
@@ -30,6 +34,9 @@ const char* materias[] = {
     "Problemas de Historia del siglo XX", "Estructuras de Datos", "Comunicacion de Datos", "Etica Profesional"
 };
 
+// 3: FUNCIONES AUXILIARES PARA CREAR DATOS ALEATORIOS
+
+// Crea un alumno aleatorio
 Alumno crearAlumnoAleatorio() {
     // Obtener un nombre aleatorio
     const char* nombre = nombres[rand() % (sizeof(nombres)/sizeof(char*))];
@@ -39,13 +46,12 @@ Alumno crearAlumnoAleatorio() {
     
     int edad = EDAD_MINIMA + rand() % (EDAD_MAXIMA - EDAD_MINIMA + 1);
     
-    Alumno a = crearAlumno(nombre, apellido, edad);
-    return a;
+    return crearAlumno(nombre, apellido, edad);
 }
 
+// Crea una materia aleatoria
 Materia crearMateriaAleatoria(){
     Materia m;
-    memset(&m, 0, sizeof(Materia));
     
     // Añadir un numero aleatorio para reducir colisiones
     int randomIndex = rand() % (sizeof(materias)/sizeof(char*));
@@ -55,16 +61,16 @@ Materia crearMateriaAleatoria(){
     if (randomSuffix > 30) {
         char nombreConSufijo[100];
         snprintf(nombreConSufijo, sizeof(nombreConSufijo), "%s %02d", 
-                 materias[randomIndex], randomSuffix);
+                materias[randomIndex], randomSuffix);
         strncpy(m.nombre, nombreConSufijo, sizeof(m.nombre) - 1);
     } else {
         strncpy(m.nombre, materias[randomIndex], sizeof(m.nombre) - 1);
     }
     
-    m.nombre[sizeof(m.nombre) - 1] = '\0';
     return m;
 }
 
+// 5: FUNCIONES PRINCIPALES DE GENERACION DE DATOS ALEATORIOS
 void generarAlumnosAleatorios(NodoAVL** raiz, int cantidad){
     if (!raiz) {
         printf("Error: Puntero a raiz es NULL\n");
@@ -100,7 +106,6 @@ void generarMateriasAleatorias(NodoMateria** lista, int cantidad) {
         return;
     }
     
-    srand(time(NULL));
     int materiasGeneradas = 0;
     int intentos = 0;
     const int maxIntentos = cantidad * 3; // Limitamos intentos para evitar bucles infinitos

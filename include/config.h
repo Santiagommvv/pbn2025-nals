@@ -17,9 +17,6 @@
 
 #define PAGINADO_TAM 5
 
-#define TRUE 1
-#define FALSE 0
-
 #define ALUMNOS_CSV  "alumnos.csv"
 #define MATERIAS_CSV "materias.csv"
 #define PLAN_ESTUDIOS "./data/planDeEstudios.txt"

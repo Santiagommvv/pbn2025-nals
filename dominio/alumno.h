@@ -4,6 +4,8 @@
 #include "../include/config.h"
 #include "materia.h"
 
+typedef struct NodoMateria NodoMateria;
+
 typedef struct MateriaRendida{
     int IDMateria;
     float nota;
@@ -29,10 +31,9 @@ Alumno crearAlumno(const char* nombre, const char* apellido, int edad);
 int rendirMateria(Alumno* alumno, Materia* materia, float nota);
 int inscribirAlumnoEnMateria(Alumno* alumno, Materia* materia);
 int eliminarMateriaDeAlumno(Alumno* alumno, int idMateria);
-// Función común para visualizar un alumno con formato
 void visualizarAlumno(Alumno a, int formatoAvanzado);
-// Funciones auxiliares para verificar correlatividades
 int haAprobadoMateria(const Alumno* alumno, int idMateria);
 int haAprobadoTodasHastaID(const Alumno* alumno, int idLimite);
+void mostrarMateriasAprobadas(const Alumno* alumno, NodoMateria* listaMaterias);
 
 #endif // ALUMNO_H

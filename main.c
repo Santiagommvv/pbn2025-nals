@@ -39,11 +39,12 @@ void mostrarMenu(){
     printf("11. Inscribir alumno en materia\n");
     printf("12. Rendir materia\n");
     printf("13. Listar materias rendidas por un alumno\n");
-    printf("14. Generar alumnos aleatorios\n");
-    printf("15. Generar materias aleatorias\n");
-    printf("16. Modificar correlatividades\n");
-    printf("17. Cargar plan de estudios\n");
-    printf("18. Salir\n");
+    printf("14. Listar materias aprobadas por un alumno\n");
+    printf("15. Generar alumnos aleatorios\n");
+    printf("16. Generar materias aleatorias\n");
+    printf("17. Modificar correlatividades\n");
+    printf("18. Cargar plan de estudios\n");
+    printf("19. Salir\n");
     printf("Elija una opcion\n");
 }
 
@@ -556,6 +557,21 @@ int main() {
             }
             
             case 14: {
+                listarAlumnosPaginado(alumnos);
+                int IDAlumno = pedirInt("Ingrese ID del alumno: ");
+
+                NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
+                if(!alumno){
+                    printf("Alumno no encontrado\n");
+                    break;
+                }
+
+                mostrarMateriasAprobadas(&alumno->alumno, listaMaterias);
+                pausar();
+                break;
+            }
+            
+            case 15: {
                 int n;
                 do {
                     n = pedirInt("¿Cuantos alumnos desea generar? (minimo 1): ");
@@ -569,7 +585,7 @@ int main() {
                 pausar();
                 break;
             }
-            case 15: {
+            case 16: {
                 int n;
                 do {
                     n = pedirInt("¿Cuantas materias desea generar? (1-50): ");
@@ -584,7 +600,7 @@ int main() {
                 pausar();
                 break;
             }
-            case 16: {
+            case 17: {
                 listarMateriasPaginado(listaMaterias);
                 int IDMateria = pedirInt("Ingrese ID de la materia para modificar correlatividades: ");
                 
@@ -619,7 +635,7 @@ int main() {
                 break;
             }
             
-            case 17: {
+            case 18: {
                 printf("Cargando plan de estudios...\n");
                 cargarPlanEstudiosCSV(&listaMaterias);
                 
@@ -631,7 +647,7 @@ int main() {
                 break;
             }
             
-            case 18: {
+            case 19: {
                 char opcionGuardar;
                 printf("¿Desea guardar los datos antes de salir? (S/N): ");
                 scanf(" %c", &opcionGuardar);
@@ -647,11 +663,6 @@ int main() {
                 
                 printf("Saliendo...\n");
                 // No pausamos en el caso de salir
-                
-                // Si no es el caso 18 (salir), añadir pausa
-                if (opcion != 18) {
-                    pausar();
-                }
                 break;
             }
 
@@ -659,7 +670,7 @@ int main() {
             printf("Opcion invalida\n");
             pausar();
         }
-    } while(opcion!= 18);
+    } while(opcion!= 19);
 
     liberarAVL(alumnos);
     liberarListaMaterias(listaMaterias);

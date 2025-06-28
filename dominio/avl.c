@@ -1,10 +1,14 @@
+// 1: INCLUDES
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "avl.h"
 #include "../datast/utils.h"
 
+// 2: FUNCIONES UTILITARIAS PARA MANEJO DEL AVL
 
+// basicas
 int max(int a, int b) {
     return (a > b) ? a : b;
 }
@@ -17,6 +21,7 @@ int balance(NodoAVL* n) {
     return n ? altura(n->izq) - altura(n->der) : 0;
 }
 
+// rotaciones
 NodoAVL* rotarDerecha(NodoAVL* y) {
     if (!y || !y->izq) return y; // Verificar si y o y->izq es NULL
     
@@ -46,6 +51,62 @@ NodoAVL* rotarIzquierda(NodoAVL* x) {
 
     return y;
 }
+
+// 3: FUNCIONES DE BÚSQUEDA EN EL AVL
+
+NodoAVL* buscarAlumnoPorApellidoAVL(NodoAVL* raiz, const char* apellido){
+    if(!raiz) return NULL;
+
+    // Busca en el subarbol izquierdo
+    NodoAVL* izq = buscarAlumnoPorApellidoAVL(raiz->izq, apellido);
+    if(izq) return izq;
+
+    // Comparar apellido actual
+    if(strcasecmp(raiz->alumno.apellido, apellido)==0){
+        return raiz;
+    }
+
+    // Buscar en el subarbol derecho
+    return buscarAlumnoPorApellidoAVL(raiz->der, apellido);
+}
+
+NodoAVL* buscarAlumnoPorIDAVL(NodoAVL* raiz, int id) {
+    if(!raiz) return NULL;
+
+    if(id == raiz->alumno.id) {
+        return raiz;
+    } else if(id < raiz->alumno.id){
+        return buscarAlumnoPorIDAVL(raiz->izq,id);
+    } else {
+        return buscarAlumnoPorIDAVL(raiz->der,id);
+    }
+}
+
+void buscarAlumnosPorEdadAVL(NodoAVL* raiz, int edadMin, int edadMax, int* encontrados){
+    if (!raiz) return;
+
+    // subarbol izquierdo
+    buscarAlumnosPorEdadAVL(raiz->izq, edadMin, edadMax, encontrados);
+    
+    // verificar alumno actual
+    int edad = raiz->alumno.edad;
+    if(edad >= edadMin && edad <= edadMax) {
+        visualizarAlumno(raiz->alumno, 0); // Usar la funcion comun
+        (*encontrados)++;
+    }
+
+    // subarbol derecho
+    buscarAlumnosPorEdadAVL(raiz->der, edadMin, edadMax, encontrados);
+}
+
+NodoAVL* minimoNodoAVL(NodoAVL* nodo){
+    NodoAVL* actual = nodo;
+    while(actual && actual->izq)
+        actual = actual->izq;
+    return actual;
+}
+
+// 4: FUNCIONES DE MANIPULACIÓN DEL AVL
 
 NodoAVL* insertarAVL(NodoAVL* nodo, Alumno alumno) {
     if (nodo == NULL) {
@@ -84,64 +145,6 @@ NodoAVL* insertarAVL(NodoAVL* nodo, Alumno alumno) {
     }
 
     return nodo;
-}
-
-void imprimirInOrden(NodoAVL* raiz) {
-    if (!raiz) return;
-    imprimirInOrden(raiz->izq);
-    printf("<<%i# %s %i>>\n", raiz->alumno.id, raiz->alumno.nombre, raiz->alumno.edad);
-    imprimirInOrden(raiz->der);
-}
-
-// Contar cantidad de nodos
-int contarAlumnos(NodoAVL* nodo){
-    if(!nodo) return 0;
-    return 1 + contarAlumnos(nodo->izq)+contarAlumnos(nodo->der);
-}
-
-// Llenar el array
-void recorrerInOrden(NodoAVL* nodo, Alumno* alumnos, int* index){
-    if(!nodo) return;
-
-    recorrerInOrden(nodo->izq, alumnos, index);
-    alumnos[*index] = nodo->alumno;
-    (*index)++;
-    recorrerInOrden(nodo->der,alumnos,index);
-}
-
-NodoAVL* buscarAlumnoPorApellidoAVL(NodoAVL* raiz, const char* apellido){
-    if(!raiz) return NULL;
-
-    // Busca en el subarbol izquierdo
-    NodoAVL* izq = buscarAlumnoPorApellidoAVL(raiz->izq, apellido);
-    if(izq) return izq;
-
-    // Comparar apellido actual
-    if(strcasecmp(raiz->alumno.apellido, apellido)==0){
-        return raiz;
-    }
-
-    // Buscar en el subarbol derecho
-    return buscarAlumnoPorApellidoAVL(raiz->der, apellido);
-}
-
-NodoAVL* buscarAlumnoPorIDAVL(NodoAVL* raiz, int id) {
-    if(!raiz) return NULL;
-
-    if(id == raiz->alumno.id) {
-        return raiz;
-    } else if(id < raiz->alumno.id){
-        return buscarAlumnoPorIDAVL(raiz->izq,id);
-    } else {
-        return buscarAlumnoPorIDAVL(raiz->der,id);
-    }
-}
-
-NodoAVL* minimoNodoAVL(NodoAVL* nodo){
-    NodoAVL* actual = nodo;
-    while(actual && actual->izq)
-        actual = actual->izq;
-    return actual;
 }
 
 NodoAVL* eliminarAlumnoAVL(NodoAVL* raiz, int id){
@@ -217,23 +220,6 @@ NodoAVL* eliminarAlumnoAVL(NodoAVL* raiz, int id){
     return raiz;
 }
 
-void buscarAlumnosPorEdadAVL(NodoAVL* raiz, int edadMin, int edadMax, int* encontrados){
-    if (!raiz) return;
-
-    // subarbol izquierdo
-    buscarAlumnosPorEdadAVL(raiz->izq, edadMin, edadMax, encontrados);
-    
-    // verificar alumno actual
-    int edad = raiz->alumno.edad;
-    if(edad >= edadMin && edad <= edadMax) {
-        visualizarAlumno(raiz->alumno, 0); // Usar la funcion comun
-        (*encontrados)++;
-    }
-
-    // subarbol derecho
-    buscarAlumnosPorEdadAVL(raiz->der, edadMin, edadMax, encontrados);
-}
-
 void modificarAlumnoAVL(NodoAVL* raiz, int id){
     if (!raiz) {
         printf("Alumno con ID %d no encontrado\n", id);
@@ -250,38 +236,6 @@ void modificarAlumnoAVL(NodoAVL* raiz, int id){
 
         pedirString("Ingrese nuevo nombre: ", raiz->alumno.nombre, MAX_NOMBRE);
         raiz->alumno.edad = pedirInt("Ingrese edad: ");
-    }
-}
-
-void listarMateriasAprobadas(Alumno* alumno, NodoMateria* listaMaterias){
-    if(!alumno) {
-        printf("Alumno no encontrado.\n");
-        return;
-    }
-    
-    if(!listaMaterias) {
-        printf("Lista de materias no disponible.\n");
-        return;
-    }
-
-    int encontradas = 0;
-
-    printf("Materias aprobadas de %s (ID %d):\n", alumno->nombre, alumno->id);
-
-    for(int i= 0;i< alumno->cantidadMateriasRendidas; i++){
-        MateriaRendida materia = alumno->materiasRendidas[i];
-        if(materia.aprobo){
-            NodoMateria* nodoMateria = buscarMateriaPorID(listaMaterias, materia.IDMateria);
-            printf("- %s (ID %d), nota: %.2f\n",
-                    nodoMateria ? nodoMateria->datos.nombre : "Desconocida",
-                    materia.IDMateria,
-                    materia.nota);
-                encontradas++;            
-        }
-    }
-
-    if(encontradas == 0){
-        printf("No hay materias aprobadas registradas.\n");
     }
 }
 
@@ -311,6 +265,23 @@ void listarMateriasRendidas(Alumno* alumno, NodoMateria* listaMaterias) {
     }
 }
 
+// Contar cantidad de nodos
+int contarAlumnos(NodoAVL* nodo){
+    if(!nodo) return 0;
+    return 1 + contarAlumnos(nodo->izq)+contarAlumnos(nodo->der);
+}
+
+// recorrer el AVL en orden y guardar los alumnos en un arreglo
+void recorrerInOrden(NodoAVL* nodo, Alumno* alumnos, int* index){
+    if(!nodo) return;
+
+    recorrerInOrden(nodo->izq, alumnos, index);
+    alumnos[*index] = nodo->alumno;
+    (*index)++;
+    recorrerInOrden(nodo->der,alumnos,index);
+}
+
+// Liberar memoria del AVL
 void liberarAVL(NodoAVL* nodo) {
     if (!nodo) return;
     liberarAVL(nodo->izq);

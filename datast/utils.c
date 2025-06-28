@@ -12,6 +12,8 @@
 #include "utils.h"
 #include "../include/config.h"
 
+// FUNCIONES AUXILIARES PARA EVITAR REPETICION DE CODIGO
+
 // Funciones para entrada de datos
 int pedirInt(const char* mensaje) {
     if (!mensaje) {
@@ -117,7 +119,6 @@ void pausar() {
     // Limpiar el buffer de entrada y esperar por Enter
     int c;
     while ((c = getchar()) != '\n' && c != EOF) { }
-    // Eliminado el segundo getchar() que causaba la doble pausa
 }
 
 void mostrarFechaActual(char* dia, char* fecha) {
