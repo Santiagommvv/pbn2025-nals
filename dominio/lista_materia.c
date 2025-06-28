@@ -38,11 +38,11 @@ static void obtenerNombreCapitalizado(const char* nombre, char* buffer, size_t t
     capitalizarPrimeraLetra(buffer);
 }
 
-// Función auxiliar para formatear correlativas como string
+// Funcion auxiliar para formatear correlativas como string
 static void formatearCorrelativasComoString(Materia m, char* buffer, size_t tamano) {
     if (!buffer || tamano <= 0) return;
     
-    buffer[0] = '\0'; // Inicializar la cadena vacía
+    buffer[0] = '\0'; // Inicializar la cadena vacia
     
     if (m.cantidadCorrelativas > 0) {
         int pos = 0;
@@ -73,7 +73,7 @@ static void formatearCorrelativasComoString(Materia m, char* buffer, size_t tama
     }
 }
 
-// Función auxiliar para mostrar una correlativa
+// Funcion auxiliar para mostrar una correlativa
 static void mostrarCorrelativa(int idCorrelativa, NodoMateria* cabeza, int conIndice, int indice) {
     NodoMateria* correlativa = buscarMateriaPorID(cabeza, idCorrelativa);
     
@@ -97,15 +97,15 @@ static void mostrarCorrelativa(int idCorrelativa, NodoMateria* cabeza, int conIn
     
     printf("\n");
 }
-// Función auxiliar para agregar un nodo al final de la lista
+// Funcion auxiliar para agregar un nodo al final de la lista
 static void agregarNodoAlFinal(NodoMateria** cabeza, NodoMateria* nuevoNodo) {
     if (!cabeza || !nuevoNodo) return;
     
     if (*cabeza == NULL) {
-        // Lista vacía, el nuevo nodo es la cabeza
+        // Lista vacia, el nuevo nodo es la cabeza
         *cabeza = nuevoNodo;
     } else {
-        // Encontrar el último nodo
+        // Encontrar el ultimo nodo
         NodoMateria* ultimo = *cabeza;
         while (ultimo->siguiente != NULL) {
             ultimo = ultimo->siguiente;
@@ -316,7 +316,7 @@ int modificarCorrelativasMateria(NodoMateria* cabeza, int id) {
         return 0;
     }
     
-    // Mostrar información actual de la materia
+    // Mostrar informacion actual de la materia
     char nombreCapitalizado[100];
     obtenerNombreCapitalizado(materia->datos.nombre, nombreCapitalizado, sizeof(nombreCapitalizado));
     
@@ -368,7 +368,7 @@ int modificarCorrelativasMateria(NodoMateria* cabeza, int id) {
             continue;
         }
         
-        // Validar que no se esté agregando a sí misma como correlativa
+        // Validar que no se este agregando a si misma como correlativa
         if (idCorrelativa == materia->datos.id) {
             printf("Error: Una materia no puede ser correlativa de si misma.\n");
             continue;

@@ -134,7 +134,7 @@ void mostrarFechaActual(char* dia, char* fecha) {
     strcpy(dia, dias_semana[tiempo_local->tm_wday]);
 }
 
-// Función auxiliar para crear el directorio de datos
+// Funcion auxiliar para crear el directorio de datos
 void crearDirectorioData() {
     #ifdef _WIN32
         mkdir("./data");

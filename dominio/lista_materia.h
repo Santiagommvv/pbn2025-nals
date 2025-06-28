@@ -18,9 +18,9 @@ int contarNodosMaterias(NodoMateria* cabeza);
 NodoMateria* buscarMateriaPorID(NodoMateria* cabeza, int id);
 NodoMateria* buscarMateriaPorNombre(NodoMateria* cabeza, const char* nombre);
 void liberarListaMaterias(NodoMateria* lista);
-// Función para actualizar la referencia global a la lista de materias
+// Funcion para actualizar la referencia global a la lista de materias
 void actualizarReferenciaMaterias(NodoMateria* lista);
-// Función común para visualizar una materia con formato
+// Funcion comun para visualizar una materia con formato
 void visualizarMateria(Materia m, int formatoAvanzado);
 
 

@@ -9,7 +9,7 @@
 
 // 2: FUNCIONES AUXILIARES
 
-// Verifica si existen archivos de datos guardados de una sesión anterior
+// Verifica si existen archivos de datos guardados de una sesion anterior
 int datosGuardadosDisponibles() {
     struct stat buffer1, buffer2;
     return stat(ALUMNOS_CSV, &buffer1) == 0 && stat(MATERIAS_CSV, &buffer2) == 0;
@@ -49,7 +49,7 @@ static void guardarAlumnosCSV(NodoAVL* a, FILE* f) {
     guardarAlumnosCSV(a->izq, f);
     
     Alumno al = a->alumno;
-    // Formato CSV para Excel: sin espacios después de las comas
+    // Formato CSV para Excel: sin espacios despues de las comas
     fprintf(f, "%d,%s,%s,%d,", al.id, al.apellido, al.nombre, al.edad);
 
     // Materias inscriptas (en una sola celda, separadas por punto y coma)
@@ -78,7 +78,7 @@ static void guardarMateriasCSV(NodoMateria* m, FILE* f) {
     
     while(m) {
         Materia mat = m->datos;
-        // Formato CSV para Excel: sin espacios después de las comas
+        // Formato CSV para Excel: sin espacios despues de las comas
         fprintf(f, "%d,%s,", mat.id, mat.nombre);
         
         // Alumnos inscriptos
@@ -128,7 +128,7 @@ void guardarPlanEstudiosCSV(NodoMateria* lista) {
     printf("Plan de estudios guardado correctamente en %s.\n", PLAN_ESTUDIOS);
 }
 
-// Función principal para guardar todos los datos
+// Funcion principal para guardar todos los datos
 void guardarDatos(NodoAVL* alumnos, NodoMateria* materias) {
     // Abrir archivos
     FILE* fa = fopen(ALUMNOS_CSV, "w");
@@ -170,9 +170,9 @@ static void cargarAlumnosCSV(NodoAVL** lista, FILE* f) {
         return; // Archivo vacio o error
     }
     
-    // Procesar cada línea
+    // Procesar cada linea
     while(fgets(linea, sizeof(linea), f)) {
-        // Inicializar alumno y eliminar salto de línea
+        // Inicializar alumno y eliminar salto de linea
         Alumno al = {0};
         char *ptr = strchr(linea, '\n'); 
         if(ptr) *ptr = '\0';
@@ -187,7 +187,7 @@ static void cargarAlumnosCSV(NodoAVL** lista, FILE* f) {
         }
         if(i < 4) continue; // Necesitamos al menos ID, apellido, nombre y edad
 
-        // Datos básicos
+        // Datos basicos
         al.id = atoi(campos[0]);
         normalizarNombre(al.apellido, campos[1], sizeof(al.apellido));
         normalizarNombre(al.nombre, campos[2], sizeof(al.nombre));
@@ -227,7 +227,7 @@ static void cargarAlumnosCSV(NodoAVL** lista, FILE* f) {
             free(rens);
         }
         
-        // Insertar alumno en el árbol
+        // Insertar alumno en el arbol
         *lista = insertarAVL(*lista, al);
     }
 }
@@ -243,9 +243,9 @@ static void cargarMateriasCSV(NodoMateria** lista, FILE* f) {
         return; // Archivo vacio o error
     }
     
-    // Procesar cada línea
+    // Procesar cada linea
     while(fgets(linea, sizeof(linea), f)) {
-        // Inicializar materia y eliminar salto de línea
+        // Inicializar materia y eliminar salto de linea
         Materia m = {0};
         char* nl = strchr(linea, '\n'); 
         if(nl) *nl = '\0';
@@ -255,10 +255,10 @@ static void cargarMateriasCSV(NodoMateria** lista, FILE* f) {
         char* nom = strtok(NULL, ",");
         char* ins = strtok(NULL, ",");
 
-        // Verificar campos mínimos
+        // Verificar campos minimos
         if(!id || !nom) continue;
         
-        // Datos básicos
+        // Datos basicos
         m.id = atoi(id);
         normalizarNombre(m.nombre, nom, sizeof(m.nombre));
 
@@ -304,13 +304,13 @@ void cargarPlanEstudiosCSV(NodoMateria** lista) {
         return; // Archivo vacio o error
     }
     
-    // Procesar cada línea
+    // Procesar cada linea
     while (fgets(linea, sizeof(linea), f)) {
         char* nl = strchr(linea, '\n'); 
         if (nl) *nl = '\0';
         
-        // Tokenizar la línea
-        char* tokens[MAX_CORRELATIVAS + 2]; // Código, nombre, y hasta MAX_CORRELATIVAS correlativas
+        // Tokenizar la linea
+        char* tokens[MAX_CORRELATIVAS + 2]; // Codigo, nombre, y hasta MAX_CORRELATIVAS correlativas
         int numTokens = 0;
         
         // Separar por comas
@@ -352,7 +352,7 @@ void cargarPlanEstudiosCSV(NodoMateria** lista) {
                     materia->datos.correlativas[materia->datos.cantidadCorrelativas++] = idCorrelativa;
                     correlativasAgregadas++;
                 } else {
-                    printf("Advertencia: Materia %d tiene más correlativas que el máximo permitido (%d)\n", 
+                    printf("Advertencia: Materia %d tiene mas correlativas que el maximo permitido (%d)\n", 
                             codigo, MAX_CORRELATIVAS);
                     break;
                 }
@@ -362,8 +362,8 @@ void cargarPlanEstudiosCSV(NodoMateria** lista) {
     
     fclose(f);
     
-    // Mostrar estadísticas
-    printf("Plan de estudios cargado: %d materias leídas, %d correlatividades agregadas.\n", 
+    // Mostrar estadisticas
+    printf("Plan de estudios cargado: %d materias leidas, %d correlatividades agregadas.\n", 
             materiasLeidas, correlativasAgregadas);
     
     // Mostrar informacion sobre la regla especial
@@ -371,7 +371,7 @@ void cargarPlanEstudiosCSV(NodoMateria** lista) {
             ID_MATERIAS_AVANZADAS);
 }
 
-// Función principal para cargar todos los datos
+// Funcion principal para cargar todos los datos
 void cargarDatos(NodoAVL** alumnos, NodoMateria** materias) {
     if (!alumnos || !materias) return;
     

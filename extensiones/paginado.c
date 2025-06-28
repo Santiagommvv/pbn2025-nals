@@ -22,7 +22,7 @@ static void calcularRangoPagina(int pagina, int itemsPorPagina, int total, int* 
 
 // 3: FUNCIONES AUXILIARES
 
-// Función auxiliar para navegación entre páginas
+// Funcion auxiliar para navegacion entre paginas
 static void navegacionEntrePaginas(int* pagina, int paginasTotales, char direccion) {
     if (direccion == 'n' || direccion == 'N') {
         if (*pagina + 1 < paginasTotales) {
@@ -83,13 +83,13 @@ static NodoMateria** obtenerMaterias(NodoMateria* cabeza, int inicio, int fin, i
     return materiasArray;
 }
 
-// Función para inicializar variables de paginación
+// Funcion para inicializar variables de paginacion
 static void iniciarPaginacion(int total, int itemsPorPagina, int* pagina, int* paginasTotales) {
     *pagina = 0;
     *paginasTotales = (total + itemsPorPagina - 1) / itemsPorPagina;
 }
 
-// Función para calcular el rango de elementos a mostrar en la página actual
+// Funcion para calcular el rango de elementos a mostrar en la pagina actual
 static void calcularRangoPagina(int pagina, int itemsPorPagina, int total, int* inicio, int* fin) {
     *inicio = pagina * itemsPorPagina;
     *fin = *inicio + itemsPorPagina;
@@ -129,7 +129,7 @@ static void mostrarMaterias(void* datos, int inicio, int fin) {
     free(materiasArray);
 }
 
-// Función auxiliar para pausar y limpiar la pantalla
+// Funcion auxiliar para pausar y limpiar la pantalla
 static void pausarYLimpiar() {
     char buffer[16];
     printf("Presione Enter para continuar...");
