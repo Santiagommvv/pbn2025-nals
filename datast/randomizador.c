@@ -16,7 +16,7 @@ const char* nombres[] = {
 const char* apellidos[] = {
     "Perez", "Gonzalez", "Martinez", "Gomez", "Rodriguez", "Fernandez", "Sanchez", "Rosamilia",
     "Lopez", "Diaz", "Torres", "Ramirez", "Flores", "Acosta", "Benitez", "Romero",
-    "Alvarez", "Gutierrez", "Molina", "Vega", "Sosa", "Castro", "Ortiz", "Nuñez",
+    "Alvarez", "Gutierrez", "Molina", "Vega", "Sosa", "Castro", "Ortiz",
     "Medina", "Suarez", "Herrera", "Aguirre", "Peralta", "Rios", "Morales", "Ferrari",
     "Gimenez", "Correa", "Quiroga", "Campos", "Silva", "Vargas", "Blanco", "Navarro"
 };
@@ -31,16 +31,15 @@ const char* materias[] = {
 };
 
 Alumno crearAlumnoAleatorio() {
-    char nombreCompleto[100];
+    // Obtener un nombre aleatorio
+    const char* nombre = nombres[rand() % (sizeof(nombres)/sizeof(char*))];
     
-    // Crear un nombre completo usando solo nombre y apellido (sin sufijo numérico)
-    snprintf(nombreCompleto, sizeof(nombreCompleto), "%s %s",
-        nombres[rand() % (sizeof(nombres)/sizeof(char*))], 
-        apellidos[rand() % (sizeof(apellidos)/sizeof(char*))]);
+    // Obtener un apellido aleatorio
+    const char* apellido = apellidos[rand() % (sizeof(apellidos)/sizeof(char*))];
     
     int edad = EDAD_MINIMA + rand() % (EDAD_MAXIMA - EDAD_MINIMA + 1);
     
-    Alumno a = crearAlumno(nombreCompleto, edad);
+    Alumno a = crearAlumno(nombre, apellido, edad);
     return a;
 }
 

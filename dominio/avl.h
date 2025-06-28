@@ -16,7 +16,7 @@ int balance(NodoAVL* n);
 void imprimirInOrden(NodoAVL* raiz);
 void recorrerInOrden(NodoAVL* nodo, Alumno* alumnos, int* index);
 int contarAlumnos(NodoAVL* nodo);
-NodoAVL* buscarAlumnoPorNombreAVL(NodoAVL* raiz, const char* nombre);
+NodoAVL* buscarAlumnoPorApellidoAVL(NodoAVL* raiz, const char* apellido);
 NodoAVL* buscarAlumnoPorIDAVL(NodoAVL* raiz, int id);
 void buscarAlumnosPorEdadAVL(NodoAVL* raiz, int edadMin, int edadMax, int* encontrados);
 void modificarAlumnoAVL(NodoAVL* raiz, int id);

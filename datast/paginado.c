@@ -22,6 +22,8 @@ static void mostrarPaginado(int total, int itemsPorPagina,
         return;
     }
     
+    limpiarPantalla(); // Limpiar pantalla al inicio
+    
     int pagina = 0;
     char opcion;
     int paginasTotales = (total + itemsPorPagina - 1) / itemsPorPagina;
@@ -46,8 +48,10 @@ static void mostrarPaginado(int total, int itemsPorPagina,
         
         if ((opcion == 'n' || opcion == 'N') && pagina + 1 < paginasTotales) {
             pagina++;
+            limpiarPantalla(); // Limpiar pantalla al cambiar de página
         } else if ((opcion == 'p' || opcion == 'P') && pagina > 0) {
             pagina--;
+            limpiarPantalla(); // Limpiar pantalla al cambiar de página
         } else if (opcion != 'm' && opcion != 'M') {
             printf("Opcion invalida.\n");
         }
@@ -133,8 +137,11 @@ static void mostrarAlumnosAvanzado(void* datos, int inicio, int fin) {
 void listarAlumnosAvanzado(NodoAVL* raiz) {
     if (!raiz) {
         printf("No hay alumnos para mostrar.\n");
+        pausar();  // Añadimos una pausa para que el usuario pueda leer el mensaje
         return;
     }
+    
+    limpiarPantalla(); // Limpiar la pantalla al inicio
     
     int total = contarAlumnos(raiz);
     
@@ -163,7 +170,7 @@ void listarAlumnosAvanzado(NodoAVL* raiz) {
         mostrarAlumnosAvanzado(alumnos, inicio, fin);
         
         printf("\nOpciones de navegacion:\n");
-        printf("[N] Pagina siguiente | [P] Pagina anterior | [B] Buscar por nombre\n");
+        printf("[N] Pagina siguiente | [P] Pagina anterior | [B] Buscar por apellido\n");
         printf("[E] Buscar por edad  | [I] Buscar por ID   | [M] Volver al menu principal\n");
         printf("Elija una opcion: ");
         
@@ -178,6 +185,7 @@ void listarAlumnosAvanzado(NodoAVL* raiz) {
             case 'n': case 'N':
                 if (pagina + 1 < paginasTotales) {
                     pagina++;
+                    limpiarPantalla(); // Limpiar pantalla al cambiar de página
                 } else {
                     printf("Ya esta en la ultima pagina.\n");
                 }
@@ -186,35 +194,37 @@ void listarAlumnosAvanzado(NodoAVL* raiz) {
             case 'p': case 'P':
                 if (pagina > 0) {
                     pagina--;
+                    limpiarPantalla(); // Limpiar pantalla al cambiar de página
                 } else {
                     printf("Ya esta en la primera pagina.\n");
                 }
                 break;
                 
             case 'b': case 'B': {
-                char nombre[100];
-                printf("Ingrese nombre para buscar: ");
-                fgets(nombre, sizeof(nombre), stdin);
-                nombre[strcspn(nombre, "\n")] = '\0';
+                char apellido[100];
+                printf("Ingrese apellido para buscar: ");
+                fgets(apellido, sizeof(apellido), stdin);
+                apellido[strcspn(apellido, "\n")] = '\0';
                 
-                printf("\nResultados de busqueda para '%s':\n", nombre);
+                printf("\nResultados de busqueda para apellido '%s':\n", apellido);
                 
                 int encontrados = 0;
                 for (int i = 0; i < total; i++) {
-                    if (strcasestr(alumnos[i].nombre, nombre) != NULL) {
+                    if (strcasestr(alumnos[i].apellido, apellido) != NULL) {
                         visualizarAlumno(alumnos[i], 0); // Usar la funcion comun
                         encontrados++;
                     }
                 }
                 
                 if (encontrados == 0) {
-                    printf("No se encontraron alumnos con ese nombre.\n");
+                    printf("No se encontraron alumnos con ese apellido.\n");
                 } else {
                     printf("Total encontrados: %d\n", encontrados);
                 }
                 
                 printf("Presione Enter para continuar...");
                 fgets(buffer, sizeof(buffer), stdin);
+                limpiarPantalla(); // Añadir limpieza de pantalla
                 break;
             }
             
@@ -247,6 +257,7 @@ void listarAlumnosAvanzado(NodoAVL* raiz) {
                 
                 printf("Presione Enter para continuar...");
                 fgets(buffer, sizeof(buffer), stdin);
+                limpiarPantalla(); // Añadir limpieza de pantalla
                 break;
             }
             
@@ -269,6 +280,7 @@ void listarAlumnosAvanzado(NodoAVL* raiz) {
                 
                 printf("Presione Enter para continuar...");
                 fgets(buffer, sizeof(buffer), stdin);
+                limpiarPantalla(); // Añadir limpieza de pantalla
                 break;
             }
             
@@ -314,8 +326,11 @@ static void mostrarMateriasAvanzado(void* datos, int inicio, int fin) {
 void listarMateriasAvanzado(NodoMateria* cabeza) {
     if (!cabeza) {
         printf("No hay materias para mostrar.\n");
+        pausar();  // Añadimos una pausa para que el usuario pueda leer el mensaje
         return;
     }
+    
+    limpiarPantalla(); // Limpiar la pantalla al inicio
     
     int total = contarNodosMaterias(cabeza);
     int pagina = 0;
@@ -348,6 +363,7 @@ void listarMateriasAvanzado(NodoMateria* cabeza) {
             case 'n': case 'N':
                 if (pagina + 1 < paginasTotales) {
                     pagina++;
+                    limpiarPantalla(); // Limpiar pantalla al cambiar de página
                 } else {
                     printf("Ya esta en la ultima pagina.\n");
                 }
@@ -356,6 +372,7 @@ void listarMateriasAvanzado(NodoMateria* cabeza) {
             case 'p': case 'P':
                 if (pagina > 0) {
                     pagina--;
+                    limpiarPantalla(); // Limpiar pantalla al cambiar de página
                 } else {
                     printf("Ya esta en la primera pagina.\n");
                 }
@@ -389,6 +406,7 @@ void listarMateriasAvanzado(NodoMateria* cabeza) {
                 
                 printf("Presione Enter para continuar...");
                 fgets(buffer, sizeof(buffer), stdin);
+                limpiarPantalla(); // Añadir limpieza de pantalla
                 break;
             }
             
@@ -421,6 +439,7 @@ void listarMateriasAvanzado(NodoMateria* cabeza) {
                 
                 printf("Presione Enter para continuar...");
                 fgets(buffer, sizeof(buffer), stdin);
+                limpiarPantalla(); // Añadir limpieza de pantalla
                 break;
             }
             
@@ -430,6 +449,7 @@ void listarMateriasAvanzado(NodoMateria* cabeza) {
                 printf("Funcionalidad de ordenamiento por cantidad de alumnos pendiente.\n");
                 printf("Presione Enter para continuar...");
                 fgets(buffer, sizeof(buffer), stdin);
+                limpiarPantalla(); // Añadir limpieza de pantalla
                 break;
             }
             

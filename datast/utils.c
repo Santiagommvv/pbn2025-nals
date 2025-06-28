@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 #include "utils.h"
 #include "../include/config.h"
 
@@ -94,4 +95,34 @@ char* strcasestr(const char* haystack, const char* needle) {
     }
     
     return NULL;
+}
+
+// Funciones de interfaz de usuario
+void limpiarPantalla() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
+void pausar() {
+    printf("\nPresione Enter para continuar...");
+    // Limpiar el buffer de entrada y esperar por Enter
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) { }
+    // Eliminado el segundo getchar() que causaba la doble pausa
+}
+
+void mostrarFechaActual(char* dia, char* fecha) {
+    // Obtener fecha y día actual
+    time_t ahora = time(NULL);
+    struct tm *tiempo_local = localtime(&ahora);
+    
+    // Formato de fecha: DD/MM/AAAA HH:MM:SS
+    strftime(fecha, 30, "%d/%m/%Y, %H:%M", tiempo_local);
+    
+    // Obtener el nombre del día en español
+    char *dias_semana[] = {"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
+    strcpy(dia, dias_semana[tiempo_local->tm_wday]);
 }

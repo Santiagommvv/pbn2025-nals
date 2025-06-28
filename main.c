@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <time.h>
 
 #include "include/config.h"
 #include "dominio/alumno.h"
@@ -15,10 +16,19 @@
 
 
 void mostrarMenu(){
-    printf("\n--- MENU ---\n");
+    limpiarPantalla();
+    
+    // Mostrar fecha y día actual
+    char fecha[30];
+    char dia[20];
+    mostrarFechaActual(dia, fecha);
+    
+    printf("%s, %s\n\n", dia, fecha);
+    
+    printf("--- MENU ---\n");
     printf("1. Agregar alumno\n");
     printf("2. Listar alumnos\n");
-    printf("3. Buscar alumno por nombre\n");
+    printf("3. Buscar alumno por apellido\n");
     printf("4. Buscar alumno por rango de edad\n");
     printf("5. Modificar alumno\n");
     printf("6. Eliminar alumno\n");
@@ -32,7 +42,6 @@ void mostrarMenu(){
     printf("14. Generar alumnos aleatorios\n");
     printf("15. Generar materias aleatorias\n");
     printf("16. Salir\n");
-    printf("Elija una opcion\n");
 }
 
 void cargarIDDesdeArchivo() {
@@ -41,7 +50,7 @@ void cargarIDDesdeArchivo() {
         int id;
         if(fscanf(f, "%d", &id) == 1 && id > 0) {
             establecerUltimoID(id);
-            printf("ID cargado: %d\n", id);
+            // Se eliminó la impresión del ID cargado
         } else {
             printf("Error al leer el ID del archivo o ID invalido. Iniciando con ID = 0.\n");
             establecerUltimoID(0);
@@ -73,8 +82,6 @@ void guardarIDEnArchivo() {
         int id = obtenerUltimoID();
         if (fprintf(f, "%d\n", id) < 0) {
             printf("Error al escribir el ID en el archivo\n");
-        } else {
-            printf("ID %d guardado correctamente\n", id);
         }
         fclose(f);
     } else {
@@ -83,12 +90,20 @@ void guardarIDEnArchivo() {
 }
 
 int main() {
+    // Limpiar la pantalla al inicio del programa
+    limpiarPantalla();
+    
+    // Mostrar fecha y día actual en la pantalla inicial
+    char fecha[30];
+    char dia[20];
+    mostrarFechaActual(dia, fecha);
+    printf("%s, %s\n\n", dia, fecha);
+    
     cargarIDDesdeArchivo();
     NodoAVL* alumnos = NULL;
     NodoMateria* listaMaterias = NULL;
 
     if (datosGuardadosDisponibles()) {
-        printf("Cargando datos previos...\n");
         cargarDatos(&alumnos, &listaMaterias);
         if (!alumnos && !listaMaterias) {
             printf("Advertencia: No se pudieron cargar los datos correctamente.\n");
@@ -110,6 +125,7 @@ int main() {
         // Validar que la opcion este en el rango valido
         if (opcion < 1 || opcion > 16) {
             printf("Error: Opcion invalida. Por favor ingrese un numero entre 1 y 16.\n");
+            pausar();
             continue;
         }
 
@@ -121,6 +137,15 @@ int main() {
 
                 pedirString("Ingrese nombre del alumno: ", nombre, MAX_NOMBRE);
                 
+                // Solicitar apellido
+                char apellido[50];
+                printf("Ingrese apellido: ");
+                fflush(stdin);
+                fgets(apellido, sizeof(apellido), stdin);
+                // Eliminar el salto de línea si existe
+                char *nl = strchr(apellido, '\n');
+                if (nl) *nl = '\0';
+                
                 char mensajeEdad[100];
                 sprintf(mensajeEdad, "Ingrese edad (%d-%d): ", EDAD_MINIMA, EDAD_MAXIMA);
                 
@@ -131,21 +156,22 @@ int main() {
                     }
                 } while (!edadValida(edad));
 
-                Alumno nuevo = crearAlumno(nombre, edad);
+                Alumno nuevo = crearAlumno(nombre, apellido, edad);
                 
                 // Verificar si el ID es valido (mayor que 0)
                 if (nuevo.id <= 0) {
                     printf("Error: No se pudo crear el alumno\n");
-                    break;
+                } else {
+                    NodoAVL* resultado = insertarAVL(alumnos, nuevo);
+                    if (resultado) {
+                        alumnos = resultado;
+                        printf("Alumno agregado correctamente\n");
+                    } else {
+                        printf("Error: No se pudo agregar el alumno al arbol\n");
+                    }
                 }
                 
-                NodoAVL* resultado = insertarAVL(alumnos, nuevo);
-                if (resultado) {
-                    alumnos = resultado;
-                    printf("Alumno agregado correctamente\n");
-                } else {
-                    printf("Error: No se pudo agregar el alumno al arbol\n");
-                }
+                pausar();
                 break;
             }
 
@@ -154,20 +180,21 @@ int main() {
             listarAlumnosAvanzado(alumnos);
             break;
 
-            //Buscar alumno por nombre
+            //Buscar alumno por apellido
             case 3: {
-                char nombre[100];
-                printf("Ingrese nombre para buscar: ");
-                fgets(nombre, sizeof(nombre), stdin);
-                nombre[strcspn(nombre, "\n")] = '\0';
+                char apellido[100];
+                printf("Ingrese apellido para buscar: ");
+                fgets(apellido, sizeof(apellido), stdin);
+                apellido[strcspn(apellido, "\n")] = '\0';
 
-                NodoAVL* alumno = buscarAlumnoPorNombreAVL(alumnos, nombre);
+                NodoAVL* alumno = buscarAlumnoPorApellidoAVL(alumnos, apellido);
                 if(alumno) {
-                    printf("Alumno encontrado: ID: %d | Nombre: %s | Edad: %d\n",
-                            alumno->alumno.id, alumno->alumno.nombre, alumno->alumno.edad);
+                    printf("Alumno encontrado: ID: %d | Nombre: %s %s | Edad: %d\n",
+                            alumno->alumno.id, alumno->alumno.nombre, alumno->alumno.apellido, alumno->alumno.edad);
                 } else {
                 printf("Alumno no encontrado\n");
                 }
+                pausar();
                 break;
             }
 
@@ -201,6 +228,7 @@ int main() {
                     printf("Total de alumnos encontrados: %d\n", encontrados);
                 }
 
+                pausar();
                 break;
             }
 
@@ -208,6 +236,7 @@ int main() {
             case 5: {
                 int IDAlumno = pedirInt("Ingrese ID del alumno a modificar: ");
                 modificarAlumnoAVL(alumnos, IDAlumno);
+                pausar();
                 break;
             }
 
@@ -236,6 +265,7 @@ int main() {
                 } else {
                     printf("Operacion cancelada.\n");
                 }
+                pausar();
                 break;
             }
 
@@ -250,6 +280,7 @@ int main() {
                 } else {
                     printf("Error: No se pudo agregar la materia\n");
                 }
+                pausar();
                 break;
             }
             
@@ -264,6 +295,7 @@ int main() {
                 if(!modificarMateria(listaMaterias, IDMateria)) {
                     printf("No se pudo modificar la materia.\n");
                 }
+                pausar();
                 break;
             }
 
@@ -301,6 +333,7 @@ int main() {
                 } else {
                     printf("Operacion cancelada.\n");
                 }
+                pausar();
                 break;
             }
 
@@ -394,6 +427,7 @@ int main() {
                 } else {
                     printf("Alumno inscripto correctamente en la materia.\n");
                 }
+                pausar();
                 break;
             }
 
@@ -485,6 +519,7 @@ int main() {
                 } else {
                     printf("Error: No se pudo registrar la materia como rendida.\n");
                 }
+                pausar();
                 break;
             }
 
@@ -500,6 +535,7 @@ int main() {
                 }
 
                 listarMateriasRendidas(&alumno->alumno, listaMaterias);
+                pausar();
                 break;
             }
             
@@ -514,6 +550,7 @@ int main() {
                 
                 printf("Intentando generar %d alumnos aleatorios...\n", n);
                 generarAlumnosAleatorios(&alumnos, n);
+                pausar();
                 break;
             }
             case 15: {
@@ -528,21 +565,40 @@ int main() {
                 printf("Generando %d materias aleatorias...\n", n);
                 generarMateriasAleatorias(&listaMaterias, n);
                 printf("Materias aleatorias generadas correctamente.\n");
+                pausar();
                 break;
             }
             case 16: {
+                char opcionGuardar;
+                printf("¿Desea guardar los datos antes de salir? (S/N): ");
+                scanf(" %c", &opcionGuardar);
+                getchar(); // Limpiar el buffer de entrada
+                
+                if (opcionGuardar == 'S' || opcionGuardar == 's') {
+                    guardarDatos(alumnos, listaMaterias);
+                    guardarIDEnArchivo();
+                    printf("Datos guardados correctamente.\n");
+                } else {
+                    printf("Datos no guardados.\n");
+                }
+                
                 printf("Saliendo...\n");
+                // No pausamos en el caso de salir
+                
+                // Si no es el caso 16 (salir), añadir pausa
+                if (opcion != 16) {
+                    pausar();
+                }
                 break;
             }
 
             default:
             printf("Opcion invalida\n");
+            pausar();
         }
     } while(opcion!= 16);
 
-    guardarDatos(alumnos,listaMaterias);
     liberarAVL(alumnos);
     liberarListaMaterias(listaMaterias);
-    guardarIDEnArchivo();
     return 0;
 }

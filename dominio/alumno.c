@@ -19,12 +19,12 @@ void establecerUltimoID(int id) {
     }
 }
 
-Alumno crearAlumno(const char* nombre, int edad){
+Alumno crearAlumno(const char* nombre, const char* apellido, int edad){
     Alumno nuevoAlumno = {0}; // Inicializar a cero todos los campos
     
     // Verificar si el nombre es NULL o vacio
-    if (!nombre || nombre[0] == '\0') {
-        printf("Error: Ingrese un nombre valido\n");
+    if (!nombre || nombre[0] == '\0' || !apellido || apellido[0] == '\0') {
+        printf("Error: Ingrese un nombre y apellido validos\n");
         return nuevoAlumno; // Retorna un alumno con ID=0 (invalido)
     }
     
@@ -34,7 +34,7 @@ Alumno crearAlumno(const char* nombre, int edad){
         return nuevoAlumno; // Retorna un alumno con ID=0 (invalido)
     }
     
-    // Verificar que el nombre solo contiene caracteres validos
+    // Verificar que el nombre y apellido solo contienen caracteres validos
     for (int i = 0; nombre[i] != '\0'; i++) {
         if (!isalpha((unsigned char)nombre[i]) && !isspace((unsigned char)nombre[i])) {
             printf("Error: El nombre debe contener solo letras y espacios\n");
@@ -42,10 +42,19 @@ Alumno crearAlumno(const char* nombre, int edad){
         }
     }
     
+    for (int i = 0; apellido[i] != '\0'; i++) {
+        if (!isalpha((unsigned char)apellido[i]) && !isspace((unsigned char)apellido[i])) {
+            printf("Error: El apellido debe contener solo letras y espacios\n");
+            return nuevoAlumno; // Retorna un alumno con ID=0 (invalido)
+        }
+    }
+    
     // Si paso las validaciones, ahora si incrementamos el ID
     nuevoAlumno.id = ++ultimoID;
-    strncpy(nuevoAlumno.nombre, nombre, MAX_NOMBRE-1);
-    nuevoAlumno.nombre[MAX_NOMBRE-1] = '\0';
+    strncpy(nuevoAlumno.nombre, nombre, sizeof(nuevoAlumno.nombre)-1);
+    nuevoAlumno.nombre[sizeof(nuevoAlumno.nombre)-1] = '\0';
+    strncpy(nuevoAlumno.apellido, apellido, sizeof(nuevoAlumno.apellido)-1);
+    nuevoAlumno.apellido[sizeof(nuevoAlumno.apellido)-1] = '\0';
     nuevoAlumno.edad = edad;
     nuevoAlumno.cantidadDeMateriasInscripto = 0;
     nuevoAlumno.cantidadMateriasRendidas = 0; 
@@ -177,11 +186,14 @@ int inscribirAlumnoEnMateria(Alumno* alumno, Materia* materia) {
 
 // Funcion comun para visualizar un alumno con formato
 void visualizarAlumno(Alumno a, int formatoAvanzado) {
+    char nombreCompleto[101];
+    snprintf(nombreCompleto, sizeof(nombreCompleto), "%s, %s", a.apellido, a.nombre);
+    
     if (formatoAvanzado) {
         printf("%-5d | %-30s | %-5d | %-20d\n",
-               a.id, a.nombre, a.edad, a.cantidadDeMateriasInscripto);
+               a.id, nombreCompleto, a.edad, a.cantidadDeMateriasInscripto);
     } else {
         printf("ID: %d | Nombre: %s | Edad: %d | Materias inscriptas: %d\n",
-               a.id, a.nombre, a.edad, a.cantidadDeMateriasInscripto);
+               a.id, nombreCompleto, a.edad, a.cantidadDeMateriasInscripto);
     }
 }

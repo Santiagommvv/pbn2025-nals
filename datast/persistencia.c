@@ -19,9 +19,10 @@ static void guardarAlumnosCSV(NodoAVL* a, FILE* f){
     
 
     Alumno al = a->alumno;
-    fprintf(f, "%d, %s, %d", al.id, al.nombre, al.edad);
+    // Formato CSV para Excel: sin espacios después de las comas
+    fprintf(f, "%d,%s,%s,%d,", al.id, al.apellido, al.nombre, al.edad);
 
-    // Materias inscriptas
+    // Materias inscriptas (en una sola celda, separadas por punto y coma)
     for(int i=0; i<al.cantidadDeMateriasInscripto; i++){
         fprintf(f, "%d", al.materiasInscripto[i]);
         if(i<al.cantidadDeMateriasInscripto-1) fputc(SEP_LISTA[0], f);
@@ -45,7 +46,8 @@ static void guardarMateriasCSV(NodoMateria* m, FILE* f){
     
     while(m){
         Materia mat = m->datos;
-        fprintf(f,"%d, %s", mat.id, mat.nombre);
+        // Formato CSV para Excel: sin espacios después de las comas
+        fprintf(f,"%d,%s,", mat.id, mat.nombre);
         for(int i=0;i<mat.cantidadAlumnos;i++){
             fprintf(f, "%d", mat.alumnosInscriptos[i]);
             if(i<mat.cantidadAlumnos-1) fputc(SEP_LISTA[0],f);
@@ -64,12 +66,17 @@ void guardarDatos(NodoAVL* alumnos, NodoMateria* materias){
         if(fm) fclose(fm);
         return;
     }
+    
+    // Escribir encabezados para el archivo de alumnos
+    fprintf(fa, "ID,Apellido,Nombre,Edad,Materias Inscriptas,Materias Rendidas\n");
+    
+    // Escribir encabezados para el archivo de materias
+    fprintf(fm, "ID,Nombre,Alumnos Inscriptos\n");
 
     guardarAlumnosCSV(alumnos, fa);
     guardarMateriasCSV(materias, fm);
 
     fclose(fa); fclose(fm);
-    puts("Datos guardados.");
 }
 
 //Cargar
@@ -93,23 +100,30 @@ static void cargarAlumnosCSV(NodoAVL** lista, FILE* f){
     if (!lista || !f) return;
     
     char linea[512];
+    
+    // Leer y descartar la línea de encabezado
+    if (fgets(linea, sizeof(linea), f) == NULL) {
+        return; // Archivo vacío o error
+    }
+    
     while(fgets(linea,sizeof(linea),f)){
         Alumno al = {0};
         char *ptr=strchr(linea, '\n'); if(ptr) *ptr='\0';
 
-        char* campos[4];
+        char* campos[5];
         int i=0; char* tok=strtok(linea, ",");
-        while(tok&&i<4){ campos[i++] = tok; tok=strtok(NULL, ","); }
-        if(i<3) continue;
+        while(tok&&i<5){ campos[i++] = tok; tok=strtok(NULL, ","); }
+        if(i<4) continue;
 
         al.id = atoi(campos[0]);
-        strncpy(al.nombre,campos[1],sizeof(al.nombre)-1);
-        al.edad = atoi(campos[2]);
+        strncpy(al.apellido,campos[1],sizeof(al.apellido)-1);
+        strncpy(al.nombre,campos[2],sizeof(al.nombre)-1);
+        al.edad = atoi(campos[3]);
 
         // inscriptas
         al.cantidadDeMateriasInscripto=0;
-        if(i>3 && strlen(campos[3])){
-            char** ids=NULL; int n=0; split(campos[3], SEP_LISTA, &ids, &n);
+        if(i>4 && strlen(campos[4])){
+            char** ids=NULL; int n=0; split(campos[4], SEP_LISTA, &ids, &n);
             for(int k=0;k<n;k++) al.materiasInscripto[al.cantidadDeMateriasInscripto++]=atoi(ids[k]);
             free(ids);
         }
@@ -138,6 +152,12 @@ static void cargarMateriasCSV(NodoMateria** lista, FILE* f){
     if (!lista || !f) return;
     
     char linea[256];
+    
+    // Leer y descartar la línea de encabezado
+    if (fgets(linea, sizeof(linea), f) == NULL) {
+        return; // Archivo vacío o error
+    }
+    
     while(fgets(linea,sizeof(linea),f)){
         Materia m={0};
         char* nl=strchr(linea,'\n'); if(nl) *nl='\0';

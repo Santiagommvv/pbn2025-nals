@@ -109,20 +109,20 @@ void recorrerInOrden(NodoAVL* nodo, Alumno* alumnos, int* index){
     recorrerInOrden(nodo->der,alumnos,index);
 }
 
-NodoAVL* buscarAlumnoPorNombreAVL(NodoAVL* raiz, const char* nombre){
+NodoAVL* buscarAlumnoPorApellidoAVL(NodoAVL* raiz, const char* apellido){
     if(!raiz) return NULL;
 
     // Busca en el subarbol izquierdo
-    NodoAVL* izq = buscarAlumnoPorNombreAVL(raiz->izq, nombre);
+    NodoAVL* izq = buscarAlumnoPorApellidoAVL(raiz->izq, apellido);
     if(izq) return izq;
 
-    // Comparar nombre actual
-    if(strcasecmp(raiz->alumno.nombre, nombre)==0){
+    // Comparar apellido actual
+    if(strcasecmp(raiz->alumno.apellido, apellido)==0){
         return raiz;
     }
 
     // Buscar en el subarbol derecho
-    return buscarAlumnoPorNombreAVL(raiz->der, nombre);
+    return buscarAlumnoPorApellidoAVL(raiz->der, apellido);
 }
 
 NodoAVL* buscarAlumnoPorIDAVL(NodoAVL* raiz, int id) {
