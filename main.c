@@ -18,7 +18,7 @@
 void mostrarMenu(){
     limpiarPantalla();
     
-    // Mostrar fecha y día actual
+    // Mostrar fecha y dia actual
     char fecha[30];
     char dia[20];
     mostrarFechaActual(dia, fecha);
@@ -36,12 +36,15 @@ void mostrarMenu(){
     printf("8. Listar materias\n");
     printf("9. Modificar materia\n");
     printf("10. Eliminar materia\n");
-    printf("11. Incribir alumno en materia\n");
+    printf("11. Inscribir alumno en materia\n");
     printf("12. Rendir materia\n");
     printf("13. Listar materias rendidas por un alumno\n");
     printf("14. Generar alumnos aleatorios\n");
     printf("15. Generar materias aleatorias\n");
-    printf("16. Salir\n");
+    printf("16. Modificar correlatividades\n");
+    printf("17. Cargar plan de estudios\n");
+    printf("18. Salir\n");
+    printf("Elija una opcion\n");
 }
 
 void cargarIDDesdeArchivo() {
@@ -50,7 +53,7 @@ void cargarIDDesdeArchivo() {
         int id;
         if(fscanf(f, "%d", &id) == 1 && id > 0) {
             establecerUltimoID(id);
-            // Se eliminó la impresión del ID cargado
+            // Se elimino la impresion del ID cargado
         } else {
             printf("Error al leer el ID del archivo o ID invalido. Iniciando con ID = 0.\n");
             establecerUltimoID(0);
@@ -61,21 +64,13 @@ void cargarIDDesdeArchivo() {
         establecerUltimoID(0);
         
         // Intentar crear el directorio si no existe
-        #ifdef _WIN32
-            mkdir("./data");
-        #else
-            mkdir("./data", 0777);
-        #endif
+        crearDirectorioData();
     }
 }
 
 void guardarIDEnArchivo() {
     // Intentar crear el directorio si no existe
-    #ifdef _WIN32
-        mkdir("./data");
-    #else
-        mkdir("./data", 0777);
-    #endif
+    crearDirectorioData();
     
     FILE* f = fopen("./data/ultimo_id.txt", "w");
     if(f) {
@@ -93,7 +88,7 @@ int main() {
     // Limpiar la pantalla al inicio del programa
     limpiarPantalla();
     
-    // Mostrar fecha y día actual en la pantalla inicial
+    // Mostrar fecha y dia actual en la pantalla inicial
     char fecha[30];
     char dia[20];
     mostrarFechaActual(dia, fecha);
@@ -113,6 +108,9 @@ int main() {
         alumnos = NULL;
         listaMaterias = NULL;
     }
+    
+    // Actualizar la referencia global a la lista de materias
+    actualizarReferenciaMaterias(listaMaterias);
 
     int opcion;
     char nombre[100];
@@ -123,8 +121,8 @@ int main() {
         opcion = pedirInt("Ingrese una opcion: ");
 
         // Validar que la opcion este en el rango valido
-        if (opcion < 1 || opcion > 16) {
-            printf("Error: Opcion invalida. Por favor ingrese un numero entre 1 y 16.\n");
+        if (opcion < 1 || opcion > 18) {
+            printf("Error: Opcion invalida. Por favor ingrese un numero entre 1 y 18.\n");
             pausar();
             continue;
         }
@@ -142,7 +140,7 @@ int main() {
                 printf("Ingrese apellido: ");
                 fflush(stdin);
                 fgets(apellido, sizeof(apellido), stdin);
-                // Eliminar el salto de línea si existe
+                // Eliminar el salto de linea si existe
                 char *nl = strchr(apellido, '\n');
                 if (nl) *nl = '\0';
                 
@@ -177,7 +175,7 @@ int main() {
 
             // Listar alumnos
             case 2:
-            listarAlumnosAvanzado(alumnos);
+            listarAlumnosPaginado(alumnos);
             break;
 
             //Buscar alumno por apellido
@@ -286,7 +284,7 @@ int main() {
             
             // Listar materia
             case 8:
-            listarMateriasAvanzado(listaMaterias);
+            listarMateriasPaginado(listaMaterias);
             break;
             
             // Modificar materia
@@ -339,7 +337,7 @@ int main() {
 
             // Inscribir alumno en materia
             case 11: {
-                listarAlumnosAvanzado(alumnos);
+                listarAlumnosPaginado(alumnos);
                 int IDAlumno = pedirInt("Ingrese ID del alumno a inscribir: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
@@ -355,7 +353,7 @@ int main() {
                     break;
                 }
 
-                listarMateriasAvanzado(listaMaterias);
+                listarMateriasPaginado(listaMaterias);
                 int IDMateria = pedirInt("Ingrese ID de la materia: ");
 
                 NodoMateria* materia = buscarMateriaPorID(listaMaterias, IDMateria);
@@ -398,16 +396,7 @@ int main() {
                             printf("- %s (ID: %d)\n", materiaCorrelativa->datos.nombre, idCorrelativa);
                             
                             // Verificar si el alumno aprobo esta correlativa
-                            int aprobada = 0;
-                            for (int j = 0; j < alumno->alumno.cantidadMateriasRendidas; j++) {
-                                if (alumno->alumno.materiasRendidas[j].IDMateria == idCorrelativa && 
-                                    alumno->alumno.materiasRendidas[j].aprobo) {
-                                    aprobada = 1;
-                                    break;
-                                }
-                            }
-                            
-                            if (!aprobada) {
+                            if (!haAprobadoMateria(&alumno->alumno, idCorrelativa)) {
                                 correlativasFaltantes++;
                                 printf("  > No aprobada\n");
                             } else {
@@ -422,6 +411,35 @@ int main() {
                     }
                 }
                 
+                // Verificar regla especial para materias con ID >= ID_MATERIAS_AVANZADAS
+                if (materia->datos.id >= ID_MATERIAS_AVANZADAS) {
+                    printf("Verificando requisito especial: para materias avanzadas (ID >= %d) se requiere aprobar todas las materias anteriores.\n", ID_MATERIAS_AVANZADAS);
+                    
+                    if (!haAprobadoTodasHastaID(&alumno->alumno, ID_MATERIAS_AVANZADAS)) {
+                        printf("Error: Para inscribirse en materias avanzadas (ID >= %d), debe aprobar todas las materias anteriores\n", ID_MATERIAS_AVANZADAS);
+                        
+                        // Mostrar algunas materias faltantes (limitar para no saturar la pantalla)
+                        int materiasFaltantesMostradas = 0;
+                        for (int id = 1; id < ID_MATERIAS_AVANZADAS && materiasFaltantesMostradas < 5; id++) {
+                            if (!haAprobadoMateria(&alumno->alumno, id)) {
+                                NodoMateria* materiaFaltante = buscarMateriaPorID(listaMaterias, id);
+                                if (materiaFaltante) {
+                                    printf("Falta aprobar: %s (ID: %d)\n", materiaFaltante->datos.nombre, id);
+                                    materiasFaltantesMostradas++;
+                                }
+                            }
+                        }
+                        
+                        if (materiasFaltantesMostradas == 5) {
+                            printf("... y otras materias adicionales.\n");
+                        }
+                        
+                        break;
+                    }
+                    
+                    printf("Requisito especial verificado: todas las materias anteriores estan aprobadas.\n");
+                }
+                
                 if(!inscribirAlumnoEnMateria(&alumno->alumno, &materia->datos)) {
                     printf("Error: No se pudo inscribir al alumno.\n");
                 } else {
@@ -433,7 +451,7 @@ int main() {
 
             // Rendir materia
             case 12: {
-                listarAlumnosAvanzado(alumnos);
+                listarAlumnosPaginado(alumnos);
                 int IDAlumno = pedirInt("Ingrese ID del alumno: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
@@ -510,12 +528,10 @@ int main() {
                     }
                 } while (nota < NOTA_MINIMA || nota > NOTA_MAXIMA);
 
-                if (rendirMateria(&alumno->alumno, IDMateria, nota)) {
-                    NodoMateria* materia = buscarMateriaPorID(listaMaterias, IDMateria);
-                    if (materia) {
-                        printf("Materia %s rendida correctamente con nota %.2f (%s).\n", 
-                               materia->datos.nombre, nota, (nota >= NOTA_APROBACION) ? "Aprobada" : "Desaprobada");
-                    }
+                NodoMateria* materia = buscarMateriaPorID(listaMaterias, IDMateria);
+                if (materia && rendirMateria(&alumno->alumno, &materia->datos, nota)) {
+                    printf("Materia %s rendida correctamente con nota %.2f (%s).\n", 
+                           materia->datos.nombre, nota, (nota >= NOTA_APROBACION) ? "Aprobada" : "Desaprobada");
                 } else {
                     printf("Error: No se pudo registrar la materia como rendida.\n");
                 }
@@ -525,7 +541,7 @@ int main() {
 
             // Listar materias rendidas por un alumno
             case 13: {
-                listarAlumnosAvanzado(alumnos);
+                listarAlumnosPaginado(alumnos);
                 int IDAlumno = pedirInt("Ingrese ID del alumno: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
@@ -569,6 +585,53 @@ int main() {
                 break;
             }
             case 16: {
+                listarMateriasPaginado(listaMaterias);
+                int IDMateria = pedirInt("Ingrese ID de la materia para modificar correlatividades: ");
+                
+                // Verificar si la materia existe
+                NodoMateria* materia = buscarMateriaPorID(listaMaterias, IDMateria);
+                if (!materia) {
+                    printf("Error: No existe una materia con ID %d\n", IDMateria);
+                    break;
+                }
+                
+                // Llamar a la funcion para modificar correlatividades
+                if (modificarCorrelativasMateria(listaMaterias, IDMateria)) {
+                    printf("Correlatividades modificadas correctamente.\n");
+                    
+                    // Preguntar si quiere guardar los cambios
+                    char opcionGuardar;
+                    printf("¿Desea guardar los cambios en el plan de estudios? (S/N): ");
+                    scanf(" %c", &opcionGuardar);
+                    getchar(); // Limpiar el buffer de entrada
+                    
+                    if (opcionGuardar == 'S' || opcionGuardar == 's') {
+                        // Guardar solo el plan de estudios
+                        guardarPlanEstudiosCSV(listaMaterias);
+                    } else {
+                        printf("Cambios no guardados en el archivo.\n");
+                    }
+                } else {
+                    printf("No se realizaron cambios en las correlatividades.\n");
+                }
+                
+                pausar();
+                break;
+            }
+            
+            case 17: {
+                printf("Cargando plan de estudios...\n");
+                cargarPlanEstudiosCSV(&listaMaterias);
+                
+                // Actualizar la referencia global a la lista de materias
+                actualizarReferenciaMaterias(listaMaterias);
+                
+                printf("Plan de estudios cargado correctamente.\n");
+                pausar();
+                break;
+            }
+            
+            case 18: {
                 char opcionGuardar;
                 printf("¿Desea guardar los datos antes de salir? (S/N): ");
                 scanf(" %c", &opcionGuardar);
@@ -585,8 +648,8 @@ int main() {
                 printf("Saliendo...\n");
                 // No pausamos en el caso de salir
                 
-                // Si no es el caso 16 (salir), añadir pausa
-                if (opcion != 16) {
+                // Si no es el caso 18 (salir), añadir pausa
+                if (opcion != 18) {
                     pausar();
                 }
                 break;
@@ -596,7 +659,7 @@ int main() {
             printf("Opcion invalida\n");
             pausar();
         }
-    } while(opcion!= 16);
+    } while(opcion!= 18);
 
     liberarAVL(alumnos);
     liberarListaMaterias(listaMaterias);

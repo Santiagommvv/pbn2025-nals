@@ -3,13 +3,19 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#ifdef _WIN32
+#include <direct.h>
+#else
+#include <sys/stat.h>
+#include <sys/types.h>
+#endif
 #include "utils.h"
 #include "../include/config.h"
 
 // Funciones para entrada de datos
 int pedirInt(const char* mensaje) {
     if (!mensaje) {
-        mensaje = "Ingrese un número: "; // Mensaje predeterminado si es NULL
+        mensaje = "Ingrese un numero: "; // Mensaje predeterminado si es NULL
     }
     
     int numero;
@@ -26,7 +32,7 @@ int pedirInt(const char* mensaje) {
 
 float pedirFloat(const char* mensaje) {
     if (!mensaje) {
-        mensaje = "Ingrese un número: "; // Mensaje predeterminado si es NULL
+        mensaje = "Ingrese un numero: "; // Mensaje predeterminado si es NULL
     }
     
     float valor;
@@ -43,7 +49,7 @@ float pedirFloat(const char* mensaje) {
 
 int esSoloLetrasYEspacios(const char* str) {
     if (!str) {
-        return 0; // Si str es NULL, no es válido
+        return 0; // Si str es NULL, no es valido
     }
     
     for (int i = 0; str[i] != '\0'; i++) {
@@ -56,7 +62,7 @@ int esSoloLetrasYEspacios(const char* str) {
 
 void pedirString(const char* mensaje, char* buffer, int tamanio) {
     if (!buffer || tamanio <= 0) {
-        return; // No podemos proceder sin un buffer válido
+        return; // No podemos proceder sin un buffer valido
     }
     
     if (!mensaje) {
@@ -115,14 +121,23 @@ void pausar() {
 }
 
 void mostrarFechaActual(char* dia, char* fecha) {
-    // Obtener fecha y día actual
+    // Obtener fecha y dia actual
     time_t ahora = time(NULL);
     struct tm *tiempo_local = localtime(&ahora);
     
     // Formato de fecha: DD/MM/AAAA HH:MM:SS
     strftime(fecha, 30, "%d/%m/%Y, %H:%M", tiempo_local);
     
-    // Obtener el nombre del día en español
+    // Obtener el nombre del dia en español
     char *dias_semana[] = {"Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"};
     strcpy(dia, dias_semana[tiempo_local->tm_wday]);
+}
+
+// Función auxiliar para crear el directorio de datos
+void crearDirectorioData() {
+    #ifdef _WIN32
+        mkdir("./data");
+    #else
+        mkdir("./data", 0777);
+    #endif
 }

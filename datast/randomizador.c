@@ -4,7 +4,7 @@
 #include <time.h>
 #include "randomizador.h"
 
-// Nombres y apellidos base - Ampliados para permitir más combinaciones
+// Nombres y apellidos base - Ampliados para permitir mas combinaciones
 const char* nombres[] = {
     "Juan", "Ana", "Carlos", "Laura", "Mauro", "Lucia", "Pedro", "Martina",
     "Miguel", "Sofia", "Diego", "Valentina", "Gabriel", "Camila", "Jose", "Victoria",
@@ -47,7 +47,7 @@ Materia crearMateriaAleatoria(){
     Materia m;
     memset(&m, 0, sizeof(Materia));
     
-    // Añadir un número aleatorio para reducir colisiones
+    // Añadir un numero aleatorio para reducir colisiones
     int randomIndex = rand() % (sizeof(materias)/sizeof(char*));
     int randomSuffix = rand() % 100;
     
@@ -67,7 +67,7 @@ Materia crearMateriaAleatoria(){
 
 void generarAlumnosAleatorios(NodoAVL** raiz, int cantidad){
     if (!raiz) {
-        printf("Error: Puntero a raíz es NULL\n");
+        printf("Error: Puntero a raiz es NULL\n");
         return;
     }
     
@@ -78,7 +78,7 @@ void generarAlumnosAleatorios(NodoAVL** raiz, int cantidad){
     for(int i=0; i<cantidad; i++){
         Alumno a = crearAlumnoAleatorio();
         
-        // Verificar si el alumno se creó correctamente (ID > 0)
+        // Verificar si el alumno se creo correctamente (ID > 0)
         if (a.id > 0) {
             *raiz = insertarAVL(*raiz, a);
             alumnosGenerados++;
@@ -88,7 +88,7 @@ void generarAlumnosAleatorios(NodoAVL** raiz, int cantidad){
     }
     
     if (alumnosFallidos > 0) {
-        printf("Atención: No se pudieron generar %d alumnos debido a errores.\n", alumnosFallidos);
+        printf("Atencion: No se pudieron generar %d alumnos debido a errores.\n", alumnosFallidos);
     }
     
     printf("%d alumnos aleatorios generados correctamente.\n", alumnosGenerados);

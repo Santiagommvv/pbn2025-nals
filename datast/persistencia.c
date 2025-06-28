@@ -4,8 +4,9 @@
 #include "persistencia.h"
 #include "../include/config.h"
 #include <sys/stat.h>
+#include "../dominio/lista_materia.h"
 
-//me fijo si hay datos persistidos de una sesión anterior
+//me fijo si hay datos persistidos de una sesion anterior
 int datosGuardadosDisponibles() {
     struct stat buffer1, buffer2;
     return stat(ALUMNOS_CSV, &buffer1) == 0 && stat(MATERIAS_CSV, &buffer2) == 0;
@@ -19,7 +20,7 @@ static void guardarAlumnosCSV(NodoAVL* a, FILE* f){
     
 
     Alumno al = a->alumno;
-    // Formato CSV para Excel: sin espacios después de las comas
+    // Formato CSV para Excel: sin espacios despues de las comas
     fprintf(f, "%d,%s,%s,%d,", al.id, al.apellido, al.nombre, al.edad);
 
     // Materias inscriptas (en una sola celda, separadas por punto y coma)
@@ -46,7 +47,7 @@ static void guardarMateriasCSV(NodoMateria* m, FILE* f){
     
     while(m){
         Materia mat = m->datos;
-        // Formato CSV para Excel: sin espacios después de las comas
+        // Formato CSV para Excel: sin espacios despues de las comas
         fprintf(f,"%d,%s,", mat.id, mat.nombre);
         for(int i=0;i<mat.cantidadAlumnos;i++){
             fprintf(f, "%d", mat.alumnosInscriptos[i]);
@@ -77,6 +78,9 @@ void guardarDatos(NodoAVL* alumnos, NodoMateria* materias){
     guardarMateriasCSV(materias, fm);
 
     fclose(fa); fclose(fm);
+    
+    // Guardar tambien el plan de estudios con correlatividades
+    guardarPlanEstudiosCSV(materias);
 }
 
 //Cargar
@@ -101,9 +105,9 @@ static void cargarAlumnosCSV(NodoAVL** lista, FILE* f){
     
     char linea[512];
     
-    // Leer y descartar la línea de encabezado
+    // Leer y descartar la linea de encabezado
     if (fgets(linea, sizeof(linea), f) == NULL) {
-        return; // Archivo vacío o error
+        return; // Archivo vacio o error
     }
     
     while(fgets(linea,sizeof(linea),f)){
@@ -153,9 +157,9 @@ static void cargarMateriasCSV(NodoMateria** lista, FILE* f){
     
     char linea[256];
     
-    // Leer y descartar la línea de encabezado
+    // Leer y descartar la linea de encabezado
     if (fgets(linea, sizeof(linea), f) == NULL) {
-        return; // Archivo vacío o error
+        return; // Archivo vacio o error
     }
     
     while(fgets(linea,sizeof(linea),f)){
@@ -183,6 +187,92 @@ static void cargarMateriasCSV(NodoMateria** lista, FILE* f){
     }
 }
 
+// Funcion para cargar el plan de estudios y establecer las correlatividades
+void cargarPlanEstudiosCSV(NodoMateria** lista) {
+    if (!lista) return;
+    
+    FILE* f = fopen(PLAN_ESTUDIOS, "r");
+    if (!f) {
+        printf("Error: No se pudo abrir el archivo %s\n", PLAN_ESTUDIOS);
+        return;
+    }
+    
+    char linea[256];
+    int materiasLeidas = 0;
+    int correlativasAgregadas = 0;
+    
+    // Leer y descartar la linea de encabezado
+    if (fgets(linea, sizeof(linea), f) == NULL) {
+        fclose(f);
+        return; // Archivo vacio o error
+    }
+    
+    while (fgets(linea, sizeof(linea), f)) {
+        char* nl = strchr(linea, '\n'); 
+        if (nl) *nl = '\0';
+        
+        // Tokenizar la linea
+        char* tokens[MAX_CORRELATIVAS + 2]; // Codigo, nombre, y hasta MAX_CORRELATIVAS correlativas
+        int numTokens = 0;
+        
+        // Separar por comas
+        char* token = strtok(linea, ",");
+        while (token && numTokens < MAX_CORRELATIVAS + 2) {
+            tokens[numTokens++] = token;
+            token = strtok(NULL, ",");
+        }
+        
+        if (numTokens < 2) continue; // Necesitamos al menos codigo y nombre
+        
+        int codigo = atoi(tokens[0]);
+        if (codigo <= 0) continue; // ID invalido
+        
+        // Normalizar el nombre de la materia
+        char nombreNormalizado[100];
+        strncpy(nombreNormalizado, tokens[1], sizeof(nombreNormalizado) - 1);
+        nombreNormalizado[sizeof(nombreNormalizado) - 1] = '\0';
+        
+        // Buscar la materia en la lista
+        NodoMateria* materia = buscarMateriaPorID(*lista, codigo);
+        if (!materia) {
+            // La materia no existe, la creamos
+            materia = agregarMateria(lista, nombreNormalizado);
+            if (!materia) {
+                printf("Error: No se pudo agregar la materia %s\n", nombreNormalizado);
+                continue;
+            }
+        }
+        
+        materiasLeidas++;
+        
+        // Agregar correlatividades
+        materia->datos.cantidadCorrelativas = 0; // Reiniciar correlativas
+        
+        for (int i = 2; i < numTokens; i++) {
+            int idCorrelativa = atoi(tokens[i]);
+            if (idCorrelativa > 0) {
+                if (materia->datos.cantidadCorrelativas < MAX_CORRELATIVAS) {
+                    materia->datos.correlativas[materia->datos.cantidadCorrelativas++] = idCorrelativa;
+                    correlativasAgregadas++;
+                } else {
+                    printf("Advertencia: Materia %d tiene mas correlativas que el maximo permitido (%d)\n", 
+                           codigo, MAX_CORRELATIVAS);
+                    break;
+                }
+            }
+        }
+    }
+    
+    fclose(f);
+    
+    printf("Plan de estudios cargado: %d materias leidas, %d correlatividades agregadas.\n", 
+           materiasLeidas, correlativasAgregadas);
+    
+    // Mostrar informacion sobre la regla especial
+    printf("Regla especial: Materias con ID >= %d requieren tener aprobadas todas las materias anteriores.\n", 
+           ID_MATERIAS_AVANZADAS);
+}
+
 void cargarDatos(NodoAVL** alumnos, NodoMateria** materias){
     if (!alumnos || !materias) return;
     
@@ -190,4 +280,42 @@ void cargarDatos(NodoAVL** alumnos, NodoMateria** materias){
     FILE* fm=fopen(MATERIAS_CSV, "r");
     if(fa){ cargarAlumnosCSV(alumnos, fa); fclose(fa);}
     if(fm){ cargarMateriasCSV(materias, fm); fclose(fm);}
+    cargarPlanEstudiosCSV(materias);
+}
+
+// Funcion para guardar el plan de estudios con las correlatividades
+void guardarPlanEstudiosCSV(NodoMateria* lista) {
+    if (!lista) return;
+    
+    FILE* f = fopen(PLAN_ESTUDIOS, "w");
+    if (!f) {
+        printf("Error: No se pudo abrir el archivo %s para escritura\n", PLAN_ESTUDIOS);
+        return;
+    }
+    
+    // Escribir encabezado
+    fprintf(f, "codigo,nombre,correlativa1,correlativa2\n");
+    
+    // Recorrer la lista de materias y guardar cada una con sus correlatividades
+    NodoMateria* actual = lista;
+    while (actual) {
+        // Normalizar el nombre de la materia antes de guardarla
+        char nombreNormalizado[100];
+        strncpy(nombreNormalizado, actual->datos.nombre, sizeof(nombreNormalizado) - 1);
+        nombreNormalizado[sizeof(nombreNormalizado) - 1] = '\0';
+        
+        // Escribir codigo y nombre
+        fprintf(f, "%d,%s", actual->datos.id, nombreNormalizado);
+        
+        // Escribir correlatividades
+        for (int i = 0; i < actual->datos.cantidadCorrelativas; i++) {
+            fprintf(f, ",%d", actual->datos.correlativas[i]);
+        }
+        
+        fprintf(f, "\n");
+        actual = actual->siguiente;
+    }
+    
+    fclose(f);
+    printf("Plan de estudios guardado correctamente en %s.\n", PLAN_ESTUDIOS);
 }

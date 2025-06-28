@@ -22,7 +22,9 @@
 
 #define ALUMNOS_CSV  "alumnos.csv"
 #define MATERIAS_CSV "materias.csv"
+#define PLAN_ESTUDIOS "./data/planDeEstudios.txt"
 #define SEP_LISTA    "|"   // separa IDs dentro de una celda
 #define SEP_RENDIDA  ":"   // separa id:nota:aprobo
+#define ID_MATERIAS_AVANZADAS 29  // ID a partir del cual se requiere tener todas las materias anteriores
 
 #endif // CONFIG_H

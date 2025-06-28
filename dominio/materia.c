@@ -47,3 +47,44 @@ int agregarCorrelativa(Materia* materia, int IDcorrelativa){
     materia->correlativas[materia->cantidadCorrelativas++] = IDcorrelativa;
     return 1;
 }
+
+int eliminarAlumnoDeMateria(Materia* materia, int idAlumno) {
+    // Verificar si materia es NULL
+    if (!materia) {
+        printf("Error: Puntero a materia es NULL\n");
+        return 0;
+    }
+    
+    // Verificar que el ID de alumno sea valido
+    if (idAlumno <= 0) {
+        printf("Error: ID de alumno invalido (%d)\n", idAlumno);
+        return 0;
+    }
+    
+    // Buscar el alumno en la lista de inscritos
+    int indice = -1;
+    for (int i = 0; i < materia->cantidadAlumnos; i++) {
+        if (materia->alumnosInscriptos[i] == idAlumno) {
+            indice = i;
+            break;
+        }
+    }
+    
+    // Si no se encontro el alumno
+    if (indice == -1) {
+        return 0;
+    }
+    
+    // Eliminar al alumno moviendo todos los elementos posteriores una posicion
+    for (int i = indice; i < materia->cantidadAlumnos - 1; i++) {
+        materia->alumnosInscriptos[i] = materia->alumnosInscriptos[i + 1];
+    }
+    
+    // Decrementar el contador de alumnos
+    materia->cantidadAlumnos--;
+    
+    // Establecer el ultimo elemento como -1 (indicador de espacio libre)
+    materia->alumnosInscriptos[materia->cantidadAlumnos] = -1;
+    
+    return 1;
+}

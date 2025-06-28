@@ -13,4 +13,10 @@ void cargarDatos(NodoAVL** alumnos, NodoMateria** materias);
 // Guarda listas antes de salir
 void guardarDatos(NodoAVL* alumnos, NodoMateria* materias);
 
+// Guarda solo el plan de estudios (útil para guardar correlatividades)
+void guardarPlanEstudiosCSV(NodoMateria* materias);
+
+// Carga solo el plan de estudios (útil para actualizar correlatividades)
+void cargarPlanEstudiosCSV(NodoMateria** lista);
+
 #endif

@@ -16,4 +16,7 @@ void limpiarPantalla();
 void pausar();
 void mostrarFechaActual(char* dia, char* fecha);
 
+// Función para crear directorio de datos
+void crearDirectorioData();
+
 #endif // UTILS_H
