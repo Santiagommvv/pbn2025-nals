@@ -11,7 +11,7 @@ guardame esto
 - Búsqueda por rango de edad
 - Alta, baja, modificación y listado de materias
 - Inscripción y rendición de materias
-- manejo de grandes volúmenes de datos(con arboles avl)
+- Manejo de grandes volúmenes de datos(con arboles avl)
 
 ---
 
