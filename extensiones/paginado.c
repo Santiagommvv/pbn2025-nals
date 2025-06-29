@@ -395,7 +395,6 @@ void listarMateriasPaginado(NodoMateria* cabeza, int especial) {
             
             case 'm': case 'M': case 'V': case 'v':
                 // Salir al menu principal
-                return 1;
                 break;
                 
             default:

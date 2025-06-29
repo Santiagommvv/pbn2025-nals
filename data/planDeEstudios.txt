@@ -7,10 +7,10 @@ codigo,nombre,correlativa1,correlativa2
 6,problemas del siglo XX
 7,algoritmos y programacion 2,3
 8,programacion de bajo nivel,1
-9,algebra II, 4
+9,algebra II,4
 10,disenio logico,1,3,5
 11,analisis matematico I,4
-12,"cuestiones de sociologia, economia y politica"
+12,"cuestiones de sociologia
 13,estructuras de datos,7
 14,arquitectura de computadoras,10
 15,ingles

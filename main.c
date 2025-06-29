@@ -350,6 +350,7 @@ int main() {
                 if (alumno->alumno.cantidadDeMateriasInscripto >= MAX_MATERIAS_POR_ALUMNO) {
                     printf("Error: El alumno ya esta inscripto en el maximo de materias permitidas (%d).\n", 
                            MAX_MATERIAS_POR_ALUMNO);
+                    pausar();       
                     break;
                 }
 
@@ -366,6 +367,7 @@ int main() {
                 if (materia->datos.cantidadAlumnos >= MAX_ALUMNOS_POR_MATERIA) {
                     printf("Error: La materia ya tiene el maximo de alumnos inscriptos (%d).\n", 
                            MAX_ALUMNOS_POR_MATERIA);
+                    pausar();       
                     break;
                 }
                 
@@ -380,6 +382,7 @@ int main() {
                 
                 if (yaInscripto) {
                     printf("Error: El alumno ya esta inscripto en esta materia.\n");
+                    pausar();
                     break;
                 }
                 
@@ -407,6 +410,7 @@ int main() {
                     
                     if (correlativasFaltantes > 0) {
                         printf("Error: El alumno debe aprobar todas las correlativas antes de inscribirse.\n");
+                        pausar();
                         break;
                     }
                 }
