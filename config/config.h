@@ -17,8 +17,8 @@
 
 #define PAGINADO_TAM 10
 
-#define ALUMNOS_CSV  "alumnos.csv"
-#define MATERIAS_CSV "materias.csv"
+#define ALUMNOS_CSV  "data/alumnos.csv"
+#define MATERIAS_CSV "data/materias.csv"
 #define PLAN_ESTUDIOS "./data/planDeEstudios.txt"
 #define SEP_LISTA    "|"   // separa IDs dentro de una celda
 #define SEP_RENDIDA  ":"   // separa id:nota:aprobo
