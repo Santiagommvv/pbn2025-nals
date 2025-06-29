@@ -11,7 +11,7 @@ guardame esto
 - Búsqueda por rango de edad
 - Alta, baja, modificación y listado de materias
 - Inscripción y rendición de materias
-- manejo de grandes volúmenes de datos(con arboles avl)
+- Manejo de grandes volúmenes de datos(con arboles avl)
 
 ---
 
@@ -21,7 +21,6 @@ guardame esto
 |-----------------------------------------------------------------------|---------------|
 | Paginado                                                              | ✅ Hecho      |
 | Generación masiva de alumnos y materias                               | ✅ Hecho      |
-| Restricción por correlatividades antes de inscribirse                 | ✅ Hecho      |
 | Archivo de configuración general (config.h)                           | ✅ Hecho      |
 | Persistencia estructurada en múltiples archivos CSV                   | ✅ Hecho      |
 | Manejo de correlatividad de materias                                  | ✅ Hecho      |
