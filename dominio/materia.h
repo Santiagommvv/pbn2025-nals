@@ -1,7 +1,7 @@
 #ifndef MATERIA_H
 #define MATERIA_H
 
-#include "../include/config.h"
+#include "../config/config.h"
 
 typedef struct Materia{
     int id;
@@ -12,10 +12,13 @@ typedef struct Materia{
     
     int correlativas[MAX_CORRELATIVAS];
     int cantidadCorrelativas;
-
 } Materia;
-#endif // MATERIA_H
+
 
 Materia crearMateria(const char* nombre);
 int agregarCorrelativa(Materia* materia, int idCorrelativa);
+int eliminarAlumnoDeMateria(Materia* materia, int idAlumno);
+
+#endif // MATERIA_H
+
 

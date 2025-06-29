@@ -1,0 +1,45 @@
+codigo,nombre,correlativa1,correlativa2
+1,introduccion a la ingeniería en computacion
+2,introduccion a la problematica del mundo contemporaneo
+3,algoritmos y programación 1
+4,algebra I
+5,matematica discreta
+6,problemas del siglo XX
+7,algoritmos y programacion 2,3
+8,programacion de bajo nivel,1
+9,algebra II, 4
+10,disenio logico,1,3,5
+11,analisis matematico I,4
+12,"cuestiones de sociologia, economia y politica"
+13,estructuras de datos,7
+14,arquitectura de computadoras,10
+15,ingles
+16,analisis matematico II,11
+17,cultura contemporanea
+18,sistemas operativos,13,8
+19,ingles tecnico,15
+20,taller de lectoescritura
+21,ingenieria de software,7,19
+22,fisica I,16
+23,comunicacion de datos,18
+24,base de datos,13,19
+25,fisica II,22
+26,redes de computadoras,23
+27,disenio y arquitectura de sistemas de computadoras,18,21
+28,probabilidad y estadistica,25
+29,trayecto formativo alternativo
+30,matematicas especiales
+31,dispositivos electronicos
+32,algebra III
+33,ingenieria de calidad
+34,laboratorio de electronica
+35,construccion de sistemas de computacion
+36,procesamiento de seniales
+37,metodologia de la investigacion
+38,sistemas embebidos
+39,sistemas ciberfisicos
+40,control automatico
+41,etica y legislacion
+42,higiene y seguridad
+43,practica profesional supervisada
+44,trabajo final integrador
