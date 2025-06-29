@@ -23,5 +23,4 @@
 | Restricción por correlatividades antes de inscribirse                 | ✅ Hecho      |
 | Archivo de configuración general (`config.h`)                         | ✅ Hecho      |
 | Persistencia estructurada en múltiples archivos CSV                   | ✅ Hecho      |
-| manejo de correlatividad de materias                                  | ✅ Hecho      |
-| Seleccion de materias/alumnos desde listados reducidos                | ✅ Hecho      |
+| Manejo de correlatividad de materias                                  | ✅ Hecho      |
