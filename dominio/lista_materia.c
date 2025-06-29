@@ -339,7 +339,7 @@ int modificarCorrelativasMateria(NodoMateria* cabeza, int id) {
     
     // Preguntar si quiere modificar las correlativas
     char opcion[2];
-    pedirString("¿Desea modificar las correlativas? (S/N): ", opcion, 2);
+    pedirString("Desea modificar las correlativas? (S/N): ", opcion, 2);
     if (opcion[0] != 'S' && opcion[0] != 's') {
         printf("Operacion cancelada.\n");
         return 0;

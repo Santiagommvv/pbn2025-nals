@@ -45,7 +45,6 @@ void mostrarMenu(){
     printf("17. Modificar correlatividades\n");
     printf("18. Cargar plan de estudios\n");
     printf("19. Salir\n");
-    printf("Elija una opcion\n");
 }
 
 void cargarIDDesdeArchivo() {
@@ -122,8 +121,8 @@ int main() {
         opcion = pedirInt("Ingrese una opcion: ");
 
         // Validar que la opcion este en el rango valido
-        if (opcion < 1 || opcion > 18) {
-            printf("Error: Opcion invalida. Por favor ingrese un numero entre 1 y 18.\n");
+        if (opcion < 1 || opcion > 19) {
+            printf("Error: Opcion invalida. Por favor ingrese un numero entre 1 y 19.\n");
             pausar();
             continue;
         }
@@ -251,7 +250,7 @@ int main() {
                 }
                 
                 // Pedir confirmacion
-                printf("¿Esta seguro que desea eliminar al alumno %s (ID: %d)? (S/N): ", 
+                printf("Esta seguro que desea eliminar al alumno %s (ID: %d)? (S/N): ", 
                        alumno->alumno.nombre, alumno->alumno.id);
                 
                 char confirmacion[10];
@@ -316,7 +315,7 @@ int main() {
                 }
                 
                 // Pedir confirmacion
-                printf("¿Esta seguro que desea eliminar la materia %s (ID: %d)? (S/N): ", 
+                printf("Esta seguro que desea eliminar la materia %s (ID: %d)? (S/N): ", 
                        materia->datos.nombre, materia->datos.id);
                 
                 char confirmacion[10];
@@ -574,7 +573,7 @@ int main() {
             case 15: {
                 int n;
                 do {
-                    n = pedirInt("¿Cuantos alumnos desea generar? (minimo 1): ");
+                    n = pedirInt("Cuantos alumnos desea generar? (minimo 1): ");
                     if (n <= 0) {
                         printf("Error: Debe generar al menos 1 alumno.\n");
                     }
@@ -588,7 +587,7 @@ int main() {
             case 16: {
                 int n;
                 do {
-                    n = pedirInt("¿Cuantas materias desea generar? (1-50): ");
+                    n = pedirInt("Cuantas materias desea generar? (1-50): ");
                     if (n <= 0 || n > 50) {
                         printf("Error: Ingrese un numero entre 1 y 50.\n");
                     }
@@ -617,7 +616,7 @@ int main() {
                     
                     // Preguntar si quiere guardar los cambios
                     char opcionGuardar;
-                    printf("¿Desea guardar los cambios en el plan de estudios? (S/N): ");
+                    printf("Desea guardar los cambios en el plan de estudios? (S/N): ");
                     scanf(" %c", &opcionGuardar);
                     getchar(); // Limpiar el buffer de entrada
                     
@@ -649,7 +648,7 @@ int main() {
             
             case 19: {
                 char opcionGuardar;
-                printf("¿Desea guardar los datos antes de salir? (S/N): ");
+                printf("Desea guardar los datos antes de salir? (S/N): ");
                 scanf(" %c", &opcionGuardar);
                 getchar(); // Limpiar el buffer de entrada
                 
