@@ -21,7 +21,6 @@ guardame esto
 |-----------------------------------------------------------------------|---------------|
 | Paginado                                                              | ✅ Hecho      |
 | Generación masiva de alumnos y materias                               | ✅ Hecho      |
-| Restricción por correlatividades antes de inscribirse                 | ✅ Hecho      |
 | Archivo de configuración general (config.h)                           | ✅ Hecho      |
 | Persistencia estructurada en múltiples archivos CSV                   | ✅ Hecho      |
 | Manejo de correlatividad de materias                                  | ✅ Hecho      |
