@@ -15,7 +15,7 @@
 #define NOTA_MAXIMA 10.0
 #define NOTA_APROBACION 4.0
 
-#define PAGINADO_TAM 5
+#define PAGINADO_TAM 10
 
 #define ALUMNOS_CSV  "alumnos.csv"
 #define MATERIAS_CSV "materias.csv"

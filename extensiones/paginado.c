@@ -139,7 +139,7 @@ static void pausarYLimpiar() {
 
 // 5: PAGINADO DE ALUMNOS
 // Funcion para paginado de alumnos
-void listarAlumnosPaginado(NodoAVL* raiz) {
+void listarAlumnosPaginado(NodoAVL* raiz, int especial) {
     if (!raiz) {
         printf("No hay alumnos para mostrar.\n");
         pausar();  // Añadimos una pausa para que el usuario pueda leer el mensaje
@@ -178,6 +178,9 @@ void listarAlumnosPaginado(NodoAVL* raiz) {
         printf("\nOpciones de navegacion:\n");
         printf("[N] Pagina siguiente | [P] Pagina anterior | [B] Buscar por apellido\n");
         printf("[E] Buscar por edad  | [I] Buscar por ID   | [M] Volver al menu principal\n");
+        if (especial == 1){
+            printf("[A] Elegir alumno \n");
+        }
         printf("Elija una opcion: ");
         
         char buffer[16];
@@ -271,7 +274,7 @@ void listarAlumnosPaginado(NodoAVL* raiz) {
                 break;
             }
             
-            case 'm': case 'M':
+            case 'm': case 'M': case 'a': case 'A':
                 // Salir al menu principal
                 break;
                 
@@ -279,14 +282,14 @@ void listarAlumnosPaginado(NodoAVL* raiz) {
                 printf("Opcion invalida.\n");
                 break;
         }
-    } while (opcion != 'm' && opcion != 'M');
+    } while (opcion != 'm' && opcion != 'M' && opcion != 'a' && opcion != 'A');
     
     free(alumnos);
 }
 
 // 6: PAGINADO DE MATERIAS
 // Funcion para paginado de materias
-void listarMateriasPaginado(NodoMateria* cabeza) {
+void listarMateriasPaginado(NodoMateria* cabeza, int especial) {
     if (!cabeza) {
         printf("No hay materias para mostrar.\n");
         pausar();  // Añadimos una pausa para que el usuario pueda leer el mensaje
@@ -314,6 +317,9 @@ void listarMateriasPaginado(NodoMateria* cabeza) {
         printf("\nOpciones de navegacion:\n");
         printf("[N] Pagina siguiente | [P] Pagina anterior | [B] Buscar por nombre\n");
         printf("[A] Ordenar por alumnos | [I] Buscar por ID | [M] Volver al menu principal\n");
+        if (especial == 2){
+            printf("[V] Ingrese el ID de la materia: \n");
+        }
         printf("Elija una opcion: ");
         
         char buffer[16];
@@ -387,13 +393,14 @@ void listarMateriasPaginado(NodoMateria* cabeza) {
                 break;
             }
             
-            case 'm': case 'M':
+            case 'm': case 'M': case 'V': case 'v':
                 // Salir al menu principal
+                return 1;
                 break;
                 
             default:
                 printf("Opcion invalida.\n");
                 break;
         }
-    } while (opcion != 'm' && opcion != 'M');
+    } while (opcion != 'm' && opcion != 'M' && opcion != 'V' && opcion != 'v');
 }

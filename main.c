@@ -175,7 +175,7 @@ int main() {
 
             // Listar alumnos
             case 2:
-            listarAlumnosPaginado(alumnos);
+            listarAlumnosPaginado(alumnos, 0);
             break;
 
             //Buscar alumno por apellido
@@ -284,7 +284,7 @@ int main() {
             
             // Listar materia
             case 8:
-            listarMateriasPaginado(listaMaterias);
+            listarMateriasPaginado(listaMaterias, 0);
             break;
             
             // Modificar materia
@@ -337,7 +337,7 @@ int main() {
 
             // Inscribir alumno en materia
             case 11: {
-                listarAlumnosPaginado(alumnos);
+                listarAlumnosPaginado(alumnos, 1);
                 int IDAlumno = pedirInt("Ingrese ID del alumno a inscribir: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
@@ -353,7 +353,7 @@ int main() {
                     break;
                 }
 
-                listarMateriasPaginado(listaMaterias);
+                listarMateriasPaginado(listaMaterias,2);
                 int IDMateria = pedirInt("Ingrese ID de la materia: ");
 
                 NodoMateria* materia = buscarMateriaPorID(listaMaterias, IDMateria);
@@ -451,7 +451,7 @@ int main() {
 
             // Rendir materia
             case 12: {
-                listarAlumnosPaginado(alumnos);
+                listarAlumnosPaginado(alumnos, 1);
                 int IDAlumno = pedirInt("Ingrese ID del alumno: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
@@ -541,7 +541,7 @@ int main() {
 
             // Listar materias rendidas por un alumno
             case 13: {
-                listarAlumnosPaginado(alumnos);
+                listarAlumnosPaginado(alumnos, 1);
                 int IDAlumno = pedirInt("Ingrese ID del alumno: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
@@ -556,7 +556,7 @@ int main() {
             }
             
             case 14: {
-                listarAlumnosPaginado(alumnos);
+                listarAlumnosPaginado(alumnos,1);
                 int IDAlumno = pedirInt("Ingrese ID del alumno: ");
 
                 NodoAVL* alumno = buscarAlumnoPorIDAVL(alumnos, IDAlumno);
@@ -600,7 +600,7 @@ int main() {
                 break;
             }
             case 17: {
-                listarMateriasPaginado(listaMaterias);
+                listarMateriasPaginado(listaMaterias, 2);
                 int IDMateria = pedirInt("Ingrese ID de la materia para modificar correlatividades: ");
                 
                 // Verificar si la materia existe
