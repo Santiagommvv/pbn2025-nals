@@ -1,3 +1,8 @@
+## Integrantes:
+- Cardozo, Alejandro Javier
+- Rosamilia, Nahuel
+- Palacios Segovia, Lucas
+- Morales, Santiago
 ## ✅ Requisitos mínimos: **cumplidos**
 
 - Alta, baja, modificación y listado de estudiantes
@@ -19,3 +24,6 @@
 | Restricción por correlatividades antes de inscribirse                 | ✅ Hecho      |
 | Archivo de configuración general (`config.h`)                         | ✅ Hecho      |
 | Persistencia estructurada en múltiples archivos CSV                   | ✅ Hecho      |
+| Arbol de correlatividad de materias | ✅ Hecho |
+| Seleccion de materias/alumnos desde listados reducidos |✅ Hecho |
+|Reglas para inscripción basadas en correlatividades | ✅ Hecho |
